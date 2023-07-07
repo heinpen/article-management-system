@@ -4,9 +4,10 @@ import cors from 'cors';
 import routers from './api/routes';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
-import YAML from 'yamljs';
+import yaml from 'yamljs';
 import swaggerUI from 'swagger-ui-express';
-const swaggerDocument = YAML.load('./openapi.yaml');
+
+const swaggerDocument = yaml.load('openapi.yaml');
 
 dotenv.config();
 

@@ -1,13 +1,14 @@
-import express, { RequestHandler } from 'express';
+import express from 'express';
 
-import UserController from './controllers/user.controller';
-import apiAuthUser from './middleware/auth';
+import auth from './middleware/auth';
+import { apiRegisterUser } from './controllers/register.controller';
+import { apiLoginUser } from './controllers/login.controller';
+import { apiGetUser } from './controllers/user.controller';
+
 const router = express.Router();
 
-router
-  .route('/register')
-  .post(UserController.apiRegisterUser as RequestHandler);
-router.route('/login').post(UserController.apiLoginUser);
-router.route('/user/profile').get(apiAuthUser, UserController.apiGetUser);
+router.route('/register').post(apiRegisterUser);
+router.route('/login').post(apiLoginUser);
+router.route('/user/profile').get(auth, apiGetUser);
 
 export default router;
