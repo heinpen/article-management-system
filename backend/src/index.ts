@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import yaml from 'yamljs';
 import swaggerUI from 'swagger-ui-express';
+import { errorMiddleware } from './api/middleware/errorHandler';
 
 const swaggerDocument = yaml.load('openapi.yaml');
 
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/api/v1', routers);
+app.use(errorMiddleware);
 
 mongoose
   .connect(URL)

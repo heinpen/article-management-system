@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { CustomError, registerUser } from '../services/register.service';
+import { registerUser } from '../services/register.service';
 
 interface RegisterData {
   username: string;
@@ -7,7 +7,7 @@ interface RegisterData {
   email: boolean;
 }
 
-export const apiRegisterUser: RequestHandler = async (req, res) => {
+export const apiRegisterUser: RequestHandler = async (req, res, next) => {
   try {
     const data: RegisterData = req.body;
 
@@ -15,11 +15,6 @@ export const apiRegisterUser: RequestHandler = async (req, res) => {
 
     res.json(result);
   } catch (err) {
-    if (err instanceof CustomError) {
-      return res.status(err.statusCode).json({ message: err.message });
-    }
-    if (err instanceof Error) {
-      res.status(500).json({ message: err.message });
-    }
+    next(err);
   }
 };

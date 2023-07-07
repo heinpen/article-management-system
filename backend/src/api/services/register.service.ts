@@ -1,20 +1,11 @@
 import bcrypt from 'bcrypt';
 import User from '../models/user.model';
+import { CustomError } from '../middleware/errorHandler';
 
 interface RegisterData {
   username: string;
   password: string;
   email: boolean;
-}
-
-export class CustomError extends Error {
-  statusCode: number;
-
-  constructor(statusCode: number, customMessage: string) {
-    super();
-    if (customMessage) this.message = customMessage;
-    this.statusCode = statusCode || 500;
-  }
 }
 
 export const registerUser = async (data: RegisterData) => {

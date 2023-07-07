@@ -1,7 +1,8 @@
 import { RequestHandler } from 'express';
-import { findUserByEmail, CustomError } from '../services/user.service';
+import { findUserByEmail } from '../services/user.service';
+import { CustomError } from '../middleware/errorHandler';
 
-export const apiGetUser: RequestHandler = async (req, res) => {
+export const apiGetUser: RequestHandler = async (req, res, next) => {
   try {
     const email = res.locals.email;
     const user = await findUserByEmail(email);
@@ -14,11 +15,6 @@ export const apiGetUser: RequestHandler = async (req, res) => {
 
     res.json({ username, firstName, lastName });
   } catch (err) {
-    if (err instanceof CustomError) {
-      return res.status(err.statusCode).json({ error: err.message });
-    }
-    if (err instanceof Error) {
-      res.status(500).json({ error: err.message });
-    }
+    next(err);
   }
 };

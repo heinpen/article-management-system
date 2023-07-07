@@ -1,21 +1,12 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
+import { CustomError } from '../middleware/errorHandler';
 
 interface LoginData {
   emailOrUsername: string;
   password: string;
   isChecked: boolean;
-}
-
-export class CustomError extends Error {
-  statusCode: number;
-
-  constructor(statusCode: number, customMessage: string) {
-    super();
-    if (customMessage) this.message = customMessage;
-    this.statusCode = statusCode || 500;
-  }
 }
 
 export const loginUser = async (data: LoginData) => {
