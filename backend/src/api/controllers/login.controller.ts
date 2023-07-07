@@ -13,7 +13,7 @@ export const apiLoginUser: RequestHandler = async (req, res, next) => {
 
     const token = await loginUser(data);
 
-    res.cookie('JWT_TOKEN', `Bearer ${token}`, {
+    res.cookie('JWT_TOKEN', token, {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
