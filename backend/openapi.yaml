@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Your API
+  title: API
   version: 1.0.0
 servers:
   - url: http://localhost:3001/api/v1
@@ -28,6 +28,12 @@ paths:
                 password:
                   type: string
                   example: p@ssw0rd
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
       responses:
         '200':
           description: User created successfully
