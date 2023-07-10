@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Action, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { loginUser } from './authTnunk';
 
 export interface AuthState {
   isAuth: boolean;
@@ -7,7 +8,9 @@ export interface AuthState {
     message: string;
     severity: string;
   };
-
+  query: {
+    isPending: boolean;
+  };
   userData: {
     username: string;
     firstName: string;
@@ -26,6 +29,9 @@ const initialState: AuthState = {
     isActive: false,
     message: '',
     severity: '',
+  },
+  query: {
+    isPending: false,
   },
   userData: {
     username: '',
@@ -59,6 +65,28 @@ export const authSlice = createSlice({
       state.alert.severity = '';
       state.alert.isActive = false;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(loginUser.fulfilled, (state, action) => {
+      setTimeout(() => {
+        state.isAuth = true;
+      }, 1000);
+
+      state.query.isPending = false;
+    });
+
+    builder.addCase(loginUser.pending, (state, action) => {
+      state.query.isPending = true;
+      state.alert.isActive = false;
+    });
+
+    builder.addCase(loginUser.rejected, (state, action) => {
+      state.query.isPending = false;
+
+      state.alert.message = action.payload as string;
+      state.alert.severity = 'error';
+      state.alert.isActive = true;
+    });
   },
 });
 
