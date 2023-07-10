@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@types": ["./src/types"],
+      "@redux/*": ["./src/redux/*"],
+      "routes": ["./src/routes/index"],
+      "@constants": ["./src/constants"]
+    }
+  },
+  "include": ["vite.config.ts"]
+}
