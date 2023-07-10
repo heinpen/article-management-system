@@ -6,15 +6,12 @@ import { Box } from '@mui/material';
 import { Button, Checkbox, Grid, TextField } from '@mui/material';
 
 import { Link as RouterLink } from 'react-router-dom';
-import { authActions } from '@redux/slices/authSlice';
+import { authActions } from '@redux/auth/authSlice';
 import { useAppDispatch } from '@redux/store/index';
 
 interface SignUpProps {
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
   handleInput: () => void;
-  openDialog: boolean;
-  handleDialog: () => void;
-  modalMessage: string;
 }
 
 const SignUp: FC<SignUpProps> = ({ handleSubmit, handleInput }) => {

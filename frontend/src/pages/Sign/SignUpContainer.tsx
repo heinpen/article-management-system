@@ -2,23 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SignUp from './SignUp';
-import { authActions } from '@redux/slices/authSlice';
+import { authActions } from '@redux/auth/authSlice';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@redux/store/index';
 import { DOMAIN } from '@constants';
 
 const SignUpContainer = () => {
-  const [openDialog, setOpenDialog] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [modalMessage, setModalMessage] = useState('');
 
   const { setAlert, clearAlert } = authActions;
   const isError = useSelector((state: RootState) => state.auth.alert.isActive);
-
-  const handleDialog = () => {
-    setOpenDialog(false);
-  };
 
   const handleInput = () => {
     // Clear error if user start typing in inputs
@@ -42,23 +36,19 @@ const SignUpContainer = () => {
       .then((res) => {
         const { message } = res.data;
         dispatch(setAlert({ message: message, severity: 'success' }));
-        setModalMessage(message);
+
         setTimeout(() => {
           navigate('/login', { replace: true });
         }, 1000);
       })
       .catch((e) => {
         dispatch(
-          setAlert({ message: e.response.data.error, severity: 'error' }),
+          setAlert({ message: e.response.data.message, severity: 'error' }),
         );
       });
   };
 
-  return (
-    <SignUp
-      {...{ handleSubmit, handleInput, openDialog, handleDialog, modalMessage }}
-    ></SignUp>
-  );
+  return <SignUp {...{ handleSubmit, handleInput }}></SignUp>;
 };
 
 export default SignUpContainer;
