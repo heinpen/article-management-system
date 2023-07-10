@@ -1,19 +1,17 @@
-import axios from 'axios';
 import React, { useRef } from 'react';
 import SignIn from './SignIn';
-import { authActions } from '@redux/slices/authSlice';
-import { RootState, useAppDispatch } from '@redux/store/index';
-import { useNavigate } from 'react-router-dom';
-import { DOMAIN } from '@constants';
+import { authActions } from '@redux/auth/authSlice';
+import { useAppDispatch } from '@redux/store/index';
+
+import { loginUser } from '@redux/auth/authTnunk';
 
 export const SignInContainer = () => {
   const checkboxRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { setAlert, clearAlert, login } = authActions;
+  const { clearAlert } = authActions;
 
   const handleInput = () => {
-    // Clear error if user start typing in inputs
+    // Clear any error if a user starts typing in inputs
     dispatch(clearAlert());
   };
 
@@ -27,20 +25,7 @@ export const SignInContainer = () => {
       isChecked: checkboxRef.current?.checked,
     };
 
-    axios
-      .post(`${DOMAIN}/api/v1/login`, dataToSend, { withCredentials: true })
-      .then(() => {
-        navigate('/dashboard', { replace: true });
-        dispatch(login());
-      })
-      .catch((e) => {
-        const customError = e.response.data.error;
-        if (customError) {
-          dispatch(setAlert({ message: customError, severity: 'error' }));
-        } else {
-          dispatch(setAlert(e.message));
-        }
-      });
+    dispatch(loginUser(dataToSend)); // attempt to login user
   };
 
   return (
