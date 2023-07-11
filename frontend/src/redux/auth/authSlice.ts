@@ -1,8 +1,16 @@
-import { Action, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { loginUser, registerUser } from './authTnunk';
+import {
+  Action,
+  AnyAction,
+  AsyncThunk,
+  createSlice,
+  PayloadAction,
+} from '@reduxjs/toolkit';
+
+import { RootState } from '@redux/store';
 
 export interface AuthState {
-  isAuth: boolean;
+  isLogged: boolean;
+  isRegistered: boolean;
   alert: {
     isActive: boolean;
     message: string;
@@ -21,10 +29,17 @@ export interface AuthState {
 
 type setAlertPayload = Omit<AuthState['alert'], 'isActive'>;
 
-const localAuth = localStorage.getItem('isAuth') === 'true';
+type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>;
+
+type PendingAction = ReturnType<GenericAsyncThunk['pending']>;
+type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>;
+type FulfilledAction = ReturnType<GenericAsyncThunk['fulfilled']>;
+
+const localAuth = localStorage.getItem('isLogged') === 'true';
 
 const initialState: AuthState = {
-  isAuth: localAuth,
+  isLogged: localAuth,
+  isRegistered: false,
   alert: {
     isActive: false,
     message: '',
@@ -41,16 +56,35 @@ const initialState: AuthState = {
   },
 };
 
+function isPendingAction(action: AnyAction): action is PendingAction {
+  return action.type.endsWith('/pending');
+}
+
+function isRejectedAction(action: AnyAction): action is RejectedAction {
+  return action.type.endsWith('/rejected');
+}
+
+function isFulfilledAction(action: AnyAction): action is RejectedAction {
+  return action.type.endsWith('/fulfilled');
+}
+
+const updateStateFromAction = (state: RootState['auth'], message: string) => {
+  state.query.isPending = false;
+  state.alert.message = message;
+  state.alert.isActive = true;
+};
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     login: (state) => {
-      state.isAuth = true;
+      state.isLogged = true;
+      localStorage.setItem('isLogged', 'true');
     },
 
     logout: (state) => {
-      state.isAuth = false;
+      state.isLogged = false;
     },
 
     setAlert: (state, action: PayloadAction<setAlertPayload>) => {
@@ -67,50 +101,19 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // login user
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.alert.message = action.payload;
-      state.alert.severity = 'success';
-      state.alert.isActive = true;
-      state.query.isPending = false;
-
-      state.isAuth = true;
-    });
-
-    builder.addCase(loginUser.pending, (state, action) => {
-      state.query.isPending = true;
-      state.alert.isActive = false;
-    });
-
-    builder.addCase(loginUser.rejected, (state, action) => {
-      state.query.isPending = false;
-
-      state.alert.message = action.payload as string;
-      state.alert.severity = 'error';
-      state.alert.isActive = true;
-    });
-
-    // register user
-    builder.addCase(registerUser.fulfilled, (state, action) => {
-      state.query.isPending = false;
-
-      state.alert.message = action.payload;
-      state.alert.severity = 'success';
-      state.alert.isActive = true;
-    });
-
-    builder.addCase(registerUser.pending, (state, action) => {
-      state.query.isPending = true;
-      state.alert.isActive = false;
-    });
-
-    builder.addCase(registerUser.rejected, (state, action) => {
-      state.query.isPending = false;
-
-      state.alert.message = action.payload as string;
-      state.alert.severity = 'error';
-      state.alert.isActive = true;
-    });
+    builder
+      .addMatcher(isPendingAction, (state, action) => {
+        state.query.isPending = true;
+        state.alert.isActive = false;
+      })
+      .addMatcher(isRejectedAction, (state, action) => {
+        state.alert.severity = 'error';
+        updateStateFromAction(state, action.payload as string);
+      })
+      .addMatcher(isFulfilledAction, (state, action) => {
+        state.alert.severity = 'success';
+        updateStateFromAction(state, action.payload as string);
+      });
   },
 });
 
