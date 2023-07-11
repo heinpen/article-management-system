@@ -1,7 +1,7 @@
 import { DOMAIN } from '@constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
-
+import { authActions } from '@redux/auth/authSlice';
 interface LoginData {
   emailOrUsername: string;
   password: string;
@@ -24,22 +24,27 @@ export const loginUser = createAsyncThunk<
   string,
   LoginData,
   { rejectValue: string }
->('auth/login', async (dataToSend, { fulfillWithValue, rejectWithValue }) => {
-  try {
-    const response = await axios.post(`${DOMAIN}/api/v1/login`, dataToSend, {
-      withCredentials: true,
-    });
-    return fulfillWithValue(response.data.message);
-  } catch (error) {
-    if (error instanceof AxiosError && error.response) {
-      return rejectWithValue(error.response.data.message);
-    } else if (error instanceof Error) {
-      return rejectWithValue(error.message);
-    } else {
-      return rejectWithValue('Unknown error occurred');
+>(
+  'auth/login',
+  async (dataToSend, { fulfillWithValue, rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios.post(`${DOMAIN}/api/v1/login`, dataToSend, {
+        withCredentials: true,
+      });
+      const { login } = authActions;
+      dispatch(login());
+      return fulfillWithValue(response.data.message);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        return rejectWithValue(error.response.data.message);
+      } else if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue('Unknown error occurred');
+      }
     }
-  }
-});
+  },
+);
 
 export const registerUser = createAsyncThunk<
   string,
