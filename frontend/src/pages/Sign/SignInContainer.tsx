@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import SignIn from './SignIn';
 import { authActions } from '@redux/auth/authSlice';
 import { useAppDispatch } from '@redux/store/index';
 
 import { loginUser } from '@redux/auth/authTnunk';
 
-export const SignInContainer = () => {
+const SignInContainer = () => {
   const checkboxRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const dispatch = useAppDispatch();
   const { clearAlert } = authActions;
@@ -15,18 +15,21 @@ export const SignInContainer = () => {
     dispatch(clearAlert());
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
 
-    const dataToSend = {
-      emailOrUsername: data.get('emailOrUsername'),
-      password: data.get('password'),
-      isChecked: checkboxRef.current?.checked,
-    };
+      const dataToSend = {
+        emailOrUsername: data.get('emailOrUsername'),
+        password: data.get('password'),
+        isChecked: checkboxRef.current?.checked,
+      };
 
-    dispatch(loginUser(dataToSend)); // attempt to login user
-  };
+      dispatch(loginUser(dataToSend));
+    },
+    [dispatch],
+  );
 
   return (
     <SignIn
@@ -38,3 +41,5 @@ export const SignInContainer = () => {
     />
   );
 };
+
+export default SignInContainer;
