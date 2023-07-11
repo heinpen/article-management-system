@@ -1,10 +1,18 @@
 import { RouteObject } from 'react-router';
-import { SignInContainer } from '../pages/Sign/SignInContainer';
-import Sign from '../pages/Sign/Sign';
 import { Navigate } from 'react-router-dom';
-import SignUpContainer from '../pages/Sign/SignUpContainer';
+import { Login, Registration } from '../pages/Sign';
+import Layout from '../components/Layout';
 
-export const protectedRoutes: RouteObject[] = [];
+export const protectedRoutes: RouteObject[] = [
+  {
+    path: '*',
+    element: <Navigate to="articles" replace />,
+  },
+  {
+    path: 'articles',
+    element: <Layout />,
+  },
+];
 
 export const loginRoutes: RouteObject[] = [
   {
@@ -12,19 +20,11 @@ export const loginRoutes: RouteObject[] = [
     element: <Navigate to="login" replace />,
   },
   {
-    path: 'register',
-    element: (
-      <Sign>
-        <SignUpContainer />
-      </Sign>
-    ),
+    path: 'login',
+    element: <Login />,
   },
   {
-    path: 'login',
-    element: (
-      <Sign>
-        <SignInContainer />
-      </Sign>
-    ),
+    path: 'register',
+    element: <Registration />,
   },
 ];
