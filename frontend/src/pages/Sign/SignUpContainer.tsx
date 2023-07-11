@@ -6,6 +6,7 @@ import { authActions } from '@redux/auth/authSlice';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@redux/store/index';
 import { DOMAIN } from '@constants';
+import { registerUser } from '@redux/auth/authTnunk';
 
 const SignUpContainer = () => {
   const dispatch = useAppDispatch();
@@ -31,21 +32,11 @@ const SignUpContainer = () => {
       username: data.get('username'),
     };
 
-    axios
-      .post(`${DOMAIN}/api/v1/register`, dataToSend)
-      .then((res) => {
-        const { message } = res.data;
-        dispatch(setAlert({ message: message, severity: 'success' }));
-
-        setTimeout(() => {
-          navigate('/login', { replace: true });
-        }, 1000);
-      })
-      .catch((e) => {
-        dispatch(
-          setAlert({ message: e.response.data.message, severity: 'error' }),
-        );
-      });
+    dispatch(registerUser(dataToSend)).then(() => {
+      setTimeout(() => {
+        navigate('/sign-in');
+      }, 1000);
+    });
   };
 
   return <SignUp {...{ handleSubmit, handleInput }}></SignUp>;
