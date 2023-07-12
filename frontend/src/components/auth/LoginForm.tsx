@@ -1,28 +1,52 @@
-import { FC, FormEvent, MutableRefObject } from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  TextField,
+} from '@mui/material';
 import Link from '@mui/material/Link';
-import { Box } from '@mui/material';
-import { Button, Checkbox, Grid, TextField } from '@mui/material';
+import { LoginData } from '@types';
+import { FC, useCallback, useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { authActions } from '../../redux/slices/authSlice';
-import { useAppDispatch } from '../../redux/store';
 
-interface SignInProps {
-  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  checkboxRef: MutableRefObject<HTMLInputElement>;
-  handleInput: () => void;
+interface LoginFormProps {
+  handleSubmit: (data: LoginData) => void;
+  reset: () => void;
 }
 
-const SignIn: FC<SignInProps> = ({
-  handleSubmit,
-  checkboxRef,
-  handleInput,
-}) => {
-  const { clearAlert } = authActions;
-  const dispatch = useAppDispatch();
+const LoginForm: FC<LoginFormProps> = ({ handleSubmit, reset }) => {
+  const checkboxRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+
+  const handleInput = () => {
+    // Clear any error if a user starts typing in inputs
+    reset();
+  };
+
+  const handleLocalSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+
+      const dataToSend: LoginData = {
+        emailOrUsername: data.get('emailOrUsername'),
+        password: data.get('password'),
+        isChecked: checkboxRef.current?.checked,
+      };
+
+      handleSubmit(dataToSend);
+    },
+    [handleSubmit],
+  );
 
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+    <Box
+      component="form"
+      onSubmit={handleLocalSubmit}
+      noValidate
+      sx={{ mt: 1 }}
+    >
       <TextField
         margin="normal"
         required
@@ -53,7 +77,7 @@ const SignIn: FC<SignInProps> = ({
         label="Remember me"
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        Sign In
+        Login
       </Button>
       <Grid container>
         <Grid item xs>
@@ -66,7 +90,7 @@ const SignIn: FC<SignInProps> = ({
             component={RouterLink}
             to="/register"
             variant="body2"
-            onClick={() => dispatch(clearAlert())}
+            onClick={handleInput}
           >
             {"Don't have an account? Sign Up"}
           </Link>
@@ -76,4 +100,4 @@ const SignIn: FC<SignInProps> = ({
   );
 };
 
-export default SignIn;
+export default LoginForm;

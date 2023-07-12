@@ -1,26 +1,56 @@
-import { FC, FormEvent } from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  TextField,
+} from '@mui/material';
 import Link from '@mui/material/Link';
-import { Box } from '@mui/material';
-
-import { Button, Checkbox, Grid, TextField } from '@mui/material';
-
+import { RegistrationData } from '@types';
+import { FC, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { authActions } from '@redux/auth/authSlice';
-import { useAppDispatch } from '@redux/store/index';
 
-interface SignUpProps {
-  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  handleInput: () => void;
+interface RegistrationFormProps {
+  handleSubmit: (data: RegistrationData) => void;
+  reset: () => void;
 }
 
-const SignUp: FC<SignUpProps> = ({ handleSubmit, handleInput }) => {
-  const { clearAlert } = authActions;
-  const dispatch = useAppDispatch();
+const RegistrationForm: FC<RegistrationFormProps> = ({
+  handleSubmit,
+  // handleInput,
+  reset,
+}) => {
+  const handleLocalSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const dataToSend: RegistrationData = {
+        email: data.get('email'),
+        password: data.get('password'),
+        firstName: data.get('firstName'),
+        lastName: data.get('lastName'),
+        username: data.get('username'),
+      };
+      console.log(dataToSend);
+      handleSubmit(dataToSend);
+    },
+    [handleSubmit],
+  );
+
+  const handleInput = () => {
+    // Clear error if user start typing in inputs
+    reset();
+  };
 
   return (
     <>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box
+        component="form"
+        onSubmit={handleLocalSubmit}
+        noValidate
+        sx={{ mt: 1 }}
+      >
         <TextField
           margin="normal"
           required
@@ -80,7 +110,7 @@ const SignUp: FC<SignUpProps> = ({ handleSubmit, handleInput }) => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Sign up
+          Registration
         </Button>
         <Grid container>
           <Grid item>
@@ -88,7 +118,7 @@ const SignUp: FC<SignUpProps> = ({ handleSubmit, handleInput }) => {
               component={RouterLink}
               to="/login"
               variant="body2"
-              onClick={() => dispatch(clearAlert())}
+              onClick={handleInput}
             >
               {'Have account? Sign In'}
             </Link>
@@ -99,4 +129,4 @@ const SignUp: FC<SignUpProps> = ({ handleSubmit, handleInput }) => {
   );
 };
 
-export default SignUp;
+export default RegistrationForm;
