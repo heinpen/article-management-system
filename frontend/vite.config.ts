@@ -11,9 +11,12 @@ export default defineConfig({
 
       '@': path.resolve(__dirname, './src'),
       '@redux': path.resolve(__dirname, './src/redux'),
-
+      '@services': path.resolve(__dirname, './src/services'),
       '@constants': path.resolve(__dirname, './src/constants'),
       '@routes': path.resolve(__dirname, './src/routes/index'),
+      '@types': path.resolve(__dirname, './src/types.d.ts'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@utils': path.resolve(__dirname, './src/utils'),
       // Add more aliases as needed
     },
   },
