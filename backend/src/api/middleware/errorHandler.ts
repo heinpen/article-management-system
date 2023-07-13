@@ -12,8 +12,8 @@ export class CustomError extends Error {
 
 export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof CustomError) {
-    res.status(err.statusCode).json({ error: err.message });
+    res.status(err.statusCode).json({ message: err.message });
   } else if (err instanceof Error) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
