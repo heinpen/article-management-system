@@ -1,15 +1,18 @@
 import { RequestHandler } from 'express';
-import { loginUser } from '../services/login.service';
+import loginUser from '../services/login/loginUser.service';
+import validateLoginData from '../services/login/loginDataValidation.service';
 
-interface LoginData {
+export interface LoginData {
   emailOrUsername: string;
   password: string;
-  isChecked: boolean;
+  rememberMe: boolean;
 }
 
 export const apiLoginUser: RequestHandler = async (req, res, next) => {
   try {
     const data: LoginData = req.body;
+
+    validateLoginData(data);
 
     const token = await loginUser(data);
 
@@ -18,7 +21,7 @@ export const apiLoginUser: RequestHandler = async (req, res, next) => {
       sameSite: 'none',
       secure: true,
     });
-    res.json({ message: 'Token successfully set' });
+    res.json({ message: 'User successfully logged in' });
   } catch (err) {
     next(err);
   }
