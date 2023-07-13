@@ -1,15 +1,8 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  TextField,
-} from '@mui/material';
+import { Box, Button, Grid, TextField } from '@mui/material';
 import Link from '@mui/material/Link';
 import { RegistrationData } from '@types';
 import { useFormik } from 'formik';
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 
@@ -22,17 +15,26 @@ const validationSchema = Yup.object({
   email: Yup.string()
     .email('Invalid email address')
     .required('Email is required'),
-  username: Yup.string().required('Username is required'),
+  username: Yup.string()
+    .matches(
+      /^[a-zA-Z0-9]+$/,
+      'Username can only contain alphanumeric characters',
+    )
+    .min(3, 'Username must be at least 3 characters')
+    .max(30, 'Username cannot exceed 30 characters')
+    .required('Username is required'),
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
   password: Yup.string()
-    .required('Password is required')
-    .min(6, 'Password must be at least 6 characters'),
+    .matches(
+      /^[a-zA-Z0-9]{6,30}$/,
+      'Password must be between 6 and 30 characters and contain only alphanumeric characters',
+    )
+    .required('Password is required'),
 });
 
 const RegistrationForm: FC<RegistrationFormProps> = ({
   handleSubmit,
-  // handleInput,
   reset,
 }) => {
   const formik = useFormik({
@@ -42,7 +44,6 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
       firstName: '',
       lastName: '',
       password: '',
-      isChecked: true,
     },
     validationSchema,
 
@@ -54,8 +55,9 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
   });
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Clear error if user start typing in inputs
     formik.handleChange(e);
+
+    // Clear error if user start typing in inputs
     reset();
   };
 
@@ -131,12 +133,7 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
-        <FormControlLabel
-          control={
-            <Checkbox {...formik.getFieldProps('isChecked')} color="primary" />
-          }
-          label="Remember me"
-        />
+
         <Button
           type="submit"
           fullWidth

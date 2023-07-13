@@ -2,9 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
-  FormHelperText,
   Grid,
   TextField,
 } from '@mui/material';
@@ -23,7 +21,10 @@ interface LoginFormProps {
 const validationSchema = Yup.object({
   emailOrUsername: Yup.string().required('Email or username is required'),
   password: Yup.string()
-    .min(8, 'Password should be of minimum 8 characters length')
+    .matches(
+      /^[a-zA-Z0-9]{6,30}$/,
+      'Password must be between 6 and 30 characters and contain only alphanumeric characters',
+    )
     .required('Password is required'),
 });
 
@@ -32,13 +33,11 @@ const LoginForm: FC<LoginFormProps> = ({ handleSubmit, reset }) => {
     initialValues: {
       emailOrUsername: '',
       password: '',
-      isChecked: true,
+      rememberMe: true,
     },
     validationSchema,
 
     onSubmit: (values) => {
-      console.log(values);
-
       handleSubmit(values);
     },
   });
@@ -88,27 +87,12 @@ const LoginForm: FC<LoginFormProps> = ({ handleSubmit, reset }) => {
         helperText={formik.touched.password && formik.errors.password}
       />
 
-      <FormControl
-        error={formik.touched.isChecked && Boolean(formik.errors.isChecked)}
-        component="fieldset"
-        sx={{ mt: 2 }}
-      >
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="isChecked"
-              color="primary"
-              checked={formik.values.isChecked}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-          }
-          label="Remember me"
-        />
-        {formik.touched.isChecked && formik.errors.isChecked && (
-          <FormHelperText>{formik.errors.isChecked}</FormHelperText>
-        )}
-      </FormControl>
+      <FormControlLabel
+        control={
+          <Checkbox {...formik.getFieldProps('rememberMe')} color="primary" />
+        }
+        label="remember me"
+      />
 
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Login
