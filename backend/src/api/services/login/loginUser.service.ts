@@ -1,16 +1,11 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from '../models/user.model';
-import { CustomError } from '../middleware/errorHandler';
+import User from '../../models/user.model';
+import { CustomError } from '../../middleware/errorHandler';
+import { LoginData } from '../../controllers/login.controller';
 
-interface LoginData {
-  emailOrUsername: string;
-  password: string;
-  isChecked: boolean;
-}
-
-export const loginUser = async (data: LoginData) => {
-  const { emailOrUsername, password, isChecked } = data;
+const loginUser = async (data: LoginData) => {
+  const { emailOrUsername, password, rememberMe } = data;
 
   const SECRET_KEY =
     process.env.TOKEN_KEY || 'jllgshllWEUJHGHYJkjsfjds90JKLHKJDFH2L341234';
@@ -18,7 +13,6 @@ export const loginUser = async (data: LoginData) => {
   const user = await User.findOne({
     $or: [{ username: emailOrUsername }, { email: emailOrUsername }],
   }).exec();
-
   if (!user) {
     throw new CustomError(
       404,
@@ -33,9 +27,11 @@ export const loginUser = async (data: LoginData) => {
     throw new CustomError(401, 'Wrong password');
   }
 
-  const token = isChecked
+  const token = rememberMe
     ? jwt.sign({ email }, SECRET_KEY)
     : jwt.sign({ email }, SECRET_KEY, { expiresIn: 60 * 60 * 12 });
 
   return token;
 };
+
+export default loginUser;

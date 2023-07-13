@@ -1,16 +1,11 @@
 import bcrypt from 'bcrypt';
-import User from '../models/user.model';
-import { CustomError } from '../middleware/errorHandler';
+import User from '../../models/user.model';
+import { CustomError } from '../../middleware/errorHandler';
+import { RegistrationData } from '../../controllers/register.controller';
 
-interface RegisterData {
-  username: string;
-  password: string;
-  email: boolean;
-}
-
-export const registerUser = async (data: RegisterData) => {
+const registerUser = async (data: RegistrationData) => {
   const { password, username, email } = data;
-
+  console.log(data);
   // Hash password
   const hashedPassword = await bcrypt.hash(password, 5);
 
@@ -28,5 +23,7 @@ export const registerUser = async (data: RegisterData) => {
   const newUser = new User({ ...data, password: hashedPassword });
   await newUser.save();
 
-  return { message: 'User registered successfully' };
+  return 'User registered successfully';
 };
+
+export default registerUser;
