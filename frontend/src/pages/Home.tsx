@@ -1,7 +1,7 @@
 import Layout from '@components/Layout/Layout';
 import PostList from '@components/posts/PostList';
 import SkeletonList from '@components/posts/SkeletonList';
-
+import Search from '@components/ui/Search';
 import { Box, Pagination, Typography } from '@mui/material';
 import { useGetPostsMutation } from '@services/postsApi';
 import { useEffect, type FC } from 'react';
@@ -30,7 +30,9 @@ const Home: FC = () => {
       >
         Posts
       </Typography>
-
+      <Box sx={{ my: 2 }}>
+        <Search trigger={trigger} />
+      </Box>
       {data && <PostList posts={data.posts} />}
       <Pagination
         count={data?.pagination.totalPages}
