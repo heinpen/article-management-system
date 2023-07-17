@@ -3,21 +3,18 @@ import { SerializedError } from '@reduxjs/toolkit';
 
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query/react';
 
-import { useLoginUserMutation } from '@services/authApi';
-import { FulfilledResponse, RejectedResponse } from '@types';
+import { FulfilledResponse } from '@types';
 import type { FC } from 'react';
 
 interface AlertWrapperProps {
   isLoading: boolean;
-  data: FulfilledResponse | undefined;
+  data?: FulfilledResponse | undefined;
   error: FetchBaseQueryError | SerializedError | undefined;
 }
 
 interface ResponseData {
   message: string;
 }
-
-// type AlertWrapperProps = ReturnType<typeof useLoginUserMutation>[1];
 
 const AlertWrapper: FC<AlertWrapperProps> = ({ isLoading, error, data }) => {
   const message =
