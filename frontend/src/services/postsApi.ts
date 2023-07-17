@@ -24,6 +24,10 @@ interface GetPostsResponse {
     totalPages: number;
     totalPosts: number;
   };
+  sortingValues: {
+    label: string;
+    value: string;
+  }[];
   posts: PostData[];
 }
 
@@ -31,14 +35,22 @@ interface GetPostResponse {
   data: PostData;
 }
 
+interface GetPostsRequest {
+  pageId?: number;
+  searchTerm?: string;
+  sortValue?: string;
+}
+
 // Define a service using a base URL and expected endpoints
 export const postsApi = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${DOMAIN}/api/v1/` }),
   endpoints: (builder) => ({
-    getPosts: builder.mutation<GetPostsResponse, number>({
-      query: (pageId) => `posts?page=${pageId}`,
+    getPosts: builder.mutation<GetPostsResponse, GetPostsRequest>({
+      query: ({ pageId, searchTerm, sortValue }) =>
+        `posts?page=${pageId}&search=${searchTerm}&sort=${sortValue}`,
     }),
+
     getPost: builder.query<GetPostResponse, string>({
       query: (id) => `posts/${id}`,
     }),
