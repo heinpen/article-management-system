@@ -13,9 +13,47 @@ export const createPost = async ({ title, content, author }: PostData) => {
   return post.save();
 };
 
-// Get all posts
-export const getPosts = async () => {
-  return Post.find();
+// Get posts
+export const getPosts = async (searchTerm?: string, sortValue?: string) => {
+  let query = Post.find();
+
+  if (searchTerm) {
+    query = query.where('title', new RegExp(searchTerm, 'i'));
+  }
+
+  if (sortValue === 'oldest') {
+    query = query.sort({ updatedAt: 1 });
+  }
+
+  if (sortValue === 'newest') {
+    query = query.sort({ updatedAt: -1 });
+  }
+
+  return query.exec();
+};
+
+export const getPaginatedPosts = async (
+  searchTerm: string | undefined,
+  sortValue: string | undefined,
+  page: number,
+  perPage: number
+) => {
+  const startIndex = (page - 1) * perPage;
+  const endIndex = startIndex + perPage;
+
+  const posts = await getPosts(searchTerm, sortValue);
+
+  const paginatedPosts = posts.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(posts.length / perPage);
+  const totalPosts = posts.length;
+
+  return {
+    posts: paginatedPosts,
+    pagination: {
+      totalPages: totalPages,
+      totalPosts: totalPosts,
+    },
+  };
 };
 
 // Get a specific post by ID

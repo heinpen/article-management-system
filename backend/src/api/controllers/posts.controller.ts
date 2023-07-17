@@ -2,8 +2,8 @@ import { RequestHandler } from 'express';
 import {
   createPost,
   deletePost,
+  getPaginatedPosts,
   getPostById,
-  getPosts,
   updatePost,
 } from '../services/posts/post.service';
 
@@ -29,25 +29,24 @@ export const apiCreatePost: RequestHandler = async (req, res, next) => {
 // Get all posts
 export const apiGetPosts: RequestHandler = async (req, res, next) => {
   try {
-    const page = parseInt(req.query.page as string) || 1; // Получаем номер страницы из параметров запроса, или устанавливаем значение 1 по умолчанию
-    const perPage = 12; // Количество постов на одной странице
-    const startIndex = (page - 1) * perPage; // Вычисляем начальный индекс постов для текущей страницы
-    const endIndex = startIndex + perPage; // Вычисляем конечный индекс постов для текущей страницы
+    const page = parseInt(req.query.page as string) || 1;
+    const searchTerm = req.query.search as string | undefined;
+    const sortValue = req.query.sort as string | undefined;
+    const perPage = 12;
 
-    const posts = await getPosts();
+    const { posts, pagination } = await getPaginatedPosts(
+      searchTerm,
+      sortValue,
+      page,
+      perPage
+    );
 
-    const paginatedPosts = posts.slice(startIndex, endIndex); // Вырезаем посты для текущей страницы из общего списка
-    const totalPages = Math.ceil(posts.length / perPage); // Вычисляем общее количество страниц
-    const totalPosts = posts.length; // Вычисляем общее количество постов
+    const sortingValues = [
+      { label: 'Oldest', value: 'oldest' },
+      { label: 'Newest', value: 'newest' },
+    ];
 
-    const pagination = {
-      totalPages: totalPages,
-      totalPosts: totalPosts,
-    };
-
-    console.log(posts);
-    // res.json(posts);
-    res.json({ pagination, posts: paginatedPosts });
+    res.json({ posts, pagination, sortingValues });
   } catch (error) {
     next(error);
   }
