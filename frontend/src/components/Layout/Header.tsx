@@ -1,28 +1,31 @@
-import * as React from 'react';
-import Toolbar from '@mui/material/Toolbar';
+import { Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Search from '@components/ui/Search';
-import { Box, Stack } from '@mui/material';
+import Toolbar from '@mui/material/Toolbar';
+import * as React from 'react';
+import { memo } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-interface HeaderProps {
-  title: string;
-}
-
-export default function Header(props: HeaderProps) {
-  const { title } = props;
-
+const Header = memo(() => {
+  console.log('render');
   return (
     <React.Fragment>
       <Toolbar
         sx={{
           borderBottom: 1,
           borderColor: 'divider',
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
+        <Typography
+          variant="h6"
+          component={RouterLink}
+          to="/"
+          color="inherit"
+          sx={{ textDecoration: 'none' }}
+        >
+          Logo
+        </Typography>
         <Stack direction="row" spacing={2}>
           <Button variant="contained" size="small">
             Sign in
@@ -34,4 +37,7 @@ export default function Header(props: HeaderProps) {
       </Toolbar>
     </React.Fragment>
   );
-}
+});
+Header.displayName = 'Header';
+
+export default Header;
