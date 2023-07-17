@@ -10,24 +10,10 @@ import { ChangeEvent, FC } from 'react';
 import { Box } from '@mui/material';
 import useDebounce from '../../hooks/useDebounce';
 interface SearchProps {
-  trigger: (n: number) => void;
+  handleSearch: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Search: FC<SearchProps> = ({ trigger }) => {
-  const [searchTerm, setSearchTerm] = React.useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  // Perform the search or update based on the debounced value
-  React.useEffect(() => {
-    trigger(1);
-    // Example: Perform search API call or update based on debouncedSearchTerm
-    console.log(debouncedSearchTerm);
-  }, [debouncedSearchTerm]);
-
+const Search: FC<SearchProps> = ({ handleSearch }) => {
   return (
     <Box
       component="form"
