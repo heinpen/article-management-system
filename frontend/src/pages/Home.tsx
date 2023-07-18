@@ -10,9 +10,9 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { useGetPostsMutation } from '@services/postsApi';
+import { useGetPostsQuery } from '@services/postsApi';
 import { ChangeEvent, useEffect, useState, type FC } from 'react';
-import useDebounce from '../hooks/useDebounce';
+import useDebounce from '@hooks/useDebounce';
 import AlertWrapper from '@components/ui/AlertWrapper';
 import { PostData } from '@types';
 
@@ -28,9 +28,13 @@ interface PageData {
 }
 
 const Home: FC = () => {
-  const [trigger, response] = useGetPostsMutation();
-  const { data, error, isLoading } = response;
-
+  const [requestData, setRequestData] = useState({
+    page: 1,
+    search: '',
+    sort: '',
+  });
+  const { data, error, isLoading } = useGetPostsQuery(requestData);
+  // console.log(data, isLoading);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -45,11 +49,11 @@ const Home: FC = () => {
   };
 
   const handleSort = (value: string) => {
-    trigger({ pageId: 1, searchTerm: debouncedSearchTerm, sortValue: value });
+    setRequestData({ ...requestData, sort: value });
   };
 
   const handlePagination = (event: ChangeEvent<unknown>, n: number) => {
-    trigger({ pageId: n, searchTerm: debouncedSearchTerm });
+    setRequestData({ ...requestData, page: n });
     window.scrollTo(0, 0);
   };
 
@@ -65,8 +69,13 @@ const Home: FC = () => {
 
   // Perform the search or update based on the debounced value
   useEffect(() => {
-    trigger({ pageId: 1, searchTerm: debouncedSearchTerm });
-  }, [debouncedSearchTerm, trigger]);
+    console.log(debouncedSearchTerm);
+    setRequestData((prev) => ({
+      ...prev,
+      page: 1,
+      search: debouncedSearchTerm,
+    }));
+  }, [debouncedSearchTerm]);
 
   return (
     <Layout>

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { DOMAIN } from '@constants';
-import { LoginData, PostData, RegistrationData } from '@types';
+import { PostData } from '@types';
 
 interface FulfilledResponse {
   message: string;
@@ -36,9 +36,9 @@ interface GetPostResponse {
 }
 
 interface GetPostsRequest {
-  pageId?: number;
-  searchTerm?: string;
-  sortValue?: string;
+  page?: number;
+  search?: string;
+  sort?: string;
 }
 
 // Define a service using a base URL and expected endpoints
@@ -46,9 +46,9 @@ export const postsApi = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${DOMAIN}/api/v1/` }),
   endpoints: (builder) => ({
-    getPosts: builder.mutation<GetPostsResponse, GetPostsRequest>({
-      query: ({ pageId, searchTerm, sortValue }) =>
-        `posts?page=${pageId}&search=${searchTerm}&sort=${sortValue}`,
+    getPosts: builder.query<GetPostsResponse, GetPostsRequest>({
+      query: ({ page, search, sort }) =>
+        `posts?page=${page}&search=${search}&sort=${sort}`,
     }),
 
     getPost: builder.query<GetPostResponse, string>({
@@ -82,4 +82,10 @@ export const postsApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetPostsMutation, useGetPostQuery } = postsApi;
+export const {
+  useGetPostsQuery,
+  useGetPostQuery,
+  useDeletePostMutation,
+  useUpdatePostMutation,
+  useCreatePostMutation,
+} = postsApi;
