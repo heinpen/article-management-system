@@ -16,17 +16,6 @@ import useDebounce from '@hooks/useDebounce';
 import AlertWrapper from '@components/ui/AlertWrapper';
 import { PostData } from '@types';
 
-interface SortingValues {
-  label: string;
-  value: string;
-}
-
-interface PageData {
-  totalPages: number;
-  sortingValues: SortingValues[];
-  posts: PostData[];
-}
-
 const Home: FC = () => {
   const [requestData, setRequestData] = useState({
     page: 1,
@@ -34,15 +23,9 @@ const Home: FC = () => {
     sort: '',
   });
   const { data, error, isLoading } = useGetPostsQuery(requestData);
-  // console.log(data, isLoading);
+
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  const [pageData, setPageData] = useState<PageData>({
-    totalPages: 0,
-    sortingValues: [],
-    posts: [],
-  });
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -57,19 +40,8 @@ const Home: FC = () => {
     window.scrollTo(0, 0);
   };
 
-  useEffect(() => {
-    if (data) {
-      setPageData({
-        totalPages: data.pagination.totalPages,
-        sortingValues: data.sortingValues,
-        posts: data.posts,
-      });
-    }
-  }, [data, setPageData]);
-
   // Perform the search or update based on the debounced value
   useEffect(() => {
-    console.log(debouncedSearchTerm);
     setRequestData((prev) => ({
       ...prev,
       page: 1,
@@ -100,17 +72,14 @@ const Home: FC = () => {
           <AlertWrapper isLoading={isLoading} error={error}></AlertWrapper>
         </Stack>
         <Box sx={{ my: 2 }}>
-          <Sort
-            handleSort={handleSort}
-            sortingValues={pageData.sortingValues}
-          />
+          <Sort handleSort={handleSort} sortingValues={data?.sortingValues} />
         </Box>
       </Stack>
       <Box sx={{ flex: 1 }}>
-        {pageData.posts && <PostList posts={pageData.posts} />}
+        {data?.posts && <PostList posts={data?.posts} />}
       </Box>
       <Pagination
-        count={pageData.totalPages}
+        count={data?.pagination.totalPages}
         variant="outlined"
         shape="rounded"
         onChange={handlePagination}
