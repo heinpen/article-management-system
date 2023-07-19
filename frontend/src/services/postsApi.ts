@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { DOMAIN } from '@constants';
-import { PostData } from '@types';
+import { PostData, RequestData } from '@types';
+import { current } from '@reduxjs/toolkit';
 
 interface FulfilledResponse {
   message: string;
@@ -11,7 +12,6 @@ interface RequestPostData {
   data: {
     title: string;
     content: string;
-    author: string;
   };
 }
 
@@ -41,14 +41,21 @@ interface GetPostsRequest {
   sort?: string;
 }
 
+interface DeleteData {
+  id: string;
+  requestData: RequestData;
+}
+
 // Define a service using a base URL and expected endpoints
 export const postsApi = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${DOMAIN}/api/v1/` }),
+  tagTypes: ['Posts'],
   endpoints: (builder) => ({
     getPosts: builder.query<GetPostsResponse, GetPostsRequest>({
       query: ({ page, search, sort }) =>
         `posts?page=${page}&search=${search}&sort=${sort}`,
+      providesTags: ['Posts'],
     }),
 
     getPost: builder.query<GetPostResponse, string>({
@@ -70,12 +77,21 @@ export const postsApi = createApi({
         body: data,
       }),
     }),
-    deletePost: builder.mutation<FulfilledResponse, string>({
-      query: (id) => ({
+    deletePost: builder.mutation<FulfilledResponse, DeleteData>({
+      query: ({ id }) => ({
         url: `posts/${id}`,
         method: 'DELETE',
         credentials: 'include',
       }),
+      invalidatesTags: ['Posts'],
+      onQueryStarted({ id, requestData }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          postsApi.util.updateQueryData('getPosts', requestData, (draft) => {
+            draft.posts = draft.posts.filter((post) => post._id !== id);
+          }),
+        );
+        queryFulfilled.catch(patchResult.undo);
+      },
     }),
   }),
 });
