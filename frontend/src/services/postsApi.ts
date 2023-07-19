@@ -13,10 +13,11 @@ interface RequestPostData {
     title: string;
     content: string;
   };
+  requestData: RequestData;
 }
 
 interface UpdatePostData extends RequestPostData {
-  id: string;
+  id?: string;
 }
 
 interface GetPostsResponse {
@@ -62,12 +63,27 @@ export const postsApi = createApi({
       query: (id) => `posts/${id}`,
     }),
     createPost: builder.mutation<FulfilledResponse, RequestPostData>({
-      query: (data) => ({
+      query: ({ data }) => ({
         url: 'posts',
         method: 'POST',
         credentials: 'include',
         body: data,
       }),
+      invalidatesTags: ['Posts'],
+      onQueryStarted({ data, requestData }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          postsApi.util.updateQueryData('getPosts', requestData, (draft) => {
+            draft.posts.unshift({
+              ...data,
+              _id: String(Date.now()),
+              createdAt: String(Date.now()),
+              updatedAt: String(Date.now()),
+              isFake: true,
+            });
+          }),
+        );
+        queryFulfilled.catch(patchResult.undo);
+      },
     }),
     updatePost: builder.mutation<FulfilledResponse, UpdatePostData>({
       query: ({ id, data }) => ({
@@ -76,6 +92,17 @@ export const postsApi = createApi({
         credentials: 'include',
         body: data,
       }),
+      invalidatesTags: ['Posts'],
+      onQueryStarted({ id, data, requestData }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          postsApi.util.updateQueryData('getPosts', requestData, (draft) => {
+            const postIndex = draft.posts.findIndex((post) => post._id === id);
+            draft.posts[postIndex].title = data.title;
+            draft.posts[postIndex].content = data.content;
+          }),
+        );
+        queryFulfilled.catch(patchResult.undo);
+      },
     }),
     deletePost: builder.mutation<FulfilledResponse, DeleteData>({
       query: ({ id }) => ({
