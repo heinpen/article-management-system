@@ -8,7 +8,7 @@ interface FulfilledResponse {
 }
 
 interface GetUserDataResponse {
-  user: UserData;
+  user: UserData | undefined;
 }
 
 // Define a service using a base URL and expected endpoints
@@ -48,7 +48,18 @@ export const authApi = createApi({
         method: 'POST',
         credentials: 'include',
       }),
-      invalidatesTags: ['User'],
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+          dispatch(
+            authApi.util.updateQueryData('getUserData', undefined, (draft) => {
+              draft.user = undefined;
+            }),
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      },
     }),
     registerUser: builder.mutation<FulfilledResponse, RegistrationData>({
       query: (data) => ({
