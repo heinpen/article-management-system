@@ -1,16 +1,21 @@
-import { AppBar, Menu, MenuItem, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import { useGetUserDataQuery, useLogoutUserMutation } from '@services/authApi';
 import * as React from 'react';
-import { memo } from 'react';
-import { Link, Link as RouterLink } from 'react-router-dom';
+import { memo, useEffect } from 'react';
+import { Link, Link as RouterLink, useNavigate } from 'react-router-dom';
 
 const Header = memo(() => {
-  console.log('asd');
   const { data } = useGetUserDataQuery();
+  const navigate = useNavigate();
 
-  const [logoutUser] = useLogoutUserMutation();
+  const [logoutUser, { isSuccess }] = useLogoutUserMutation();
+  useEffect(() => {
+    if (isSuccess) {
+      navigate('/login');
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <React.Fragment>
@@ -55,15 +60,9 @@ const Header = memo(() => {
           </Stack>
         )}
         {data?.user && (
-          <Link to="/login" style={{ textDecoration: 'none' }}>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => logoutUser()}
-            >
-              Log out
-            </Button>
-          </Link>
+          <Button variant="contained" size="small" onClick={() => logoutUser()}>
+            Log out
+          </Button>
         )}
       </Toolbar>
     </React.Fragment>
