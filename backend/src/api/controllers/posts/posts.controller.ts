@@ -5,19 +5,17 @@ import {
   getPaginatedPosts,
   getPostById,
   updatePost,
-} from '../services/posts/post.service';
+} from '../../services/posts/post.service';
 
 export interface PostData {
   title: string;
   content: string;
-  author: string;
 }
 
 // Handle the creation of a new post
 export const apiCreatePost: RequestHandler = async (req, res, next) => {
   try {
     const data: PostData = req.body;
-
     const createdPost = await createPost(data);
 
     res.status(201).json(createdPost);
@@ -31,7 +29,7 @@ export const apiGetPosts: RequestHandler = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const searchTerm = req.query.search as string | undefined;
-    const sortValue = req.query.sort as string | undefined;
+    const sortValue = (req.query.sort as string) || 'newest';
     const perPage = 12;
 
     const { posts, pagination } = await getPaginatedPosts(

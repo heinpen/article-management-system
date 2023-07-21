@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { LoginData } from '../../controllers/login.controller';
+import { LoginData } from '../../controllers/auth/login.controller';
 import { CustomError } from '../../middleware/errorHandler';
 
 const loginSchema = Joi.object({

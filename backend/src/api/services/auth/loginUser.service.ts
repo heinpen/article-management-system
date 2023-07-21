@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../models/user.model';
 import { CustomError } from '../../middleware/errorHandler';
-import { LoginData } from '../../controllers/login.controller';
+import { LoginData } from '../../controllers/auth/login.controller';
 
 const loginUser = async (data: LoginData) => {
   const { emailOrUsername, password, rememberMe } = data;

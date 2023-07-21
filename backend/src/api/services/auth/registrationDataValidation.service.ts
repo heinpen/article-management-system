@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { RegistrationData } from '../../controllers/register.controller';
+import { RegistrationData } from '../../controllers/auth/register.controller';
 import { CustomError } from '../../middleware/errorHandler';
 
 const registrationSchema = Joi.object({
@@ -8,6 +8,7 @@ const registrationSchema = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
   password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{6,30}$')).required(),
+  isAdmin: Joi.boolean().required(),
 });
 
 const validateRegistrationData = (data: RegistrationData) => {

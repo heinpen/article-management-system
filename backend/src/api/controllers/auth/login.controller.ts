@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
-import loginUser from '../services/login/loginUser.service';
-import validateLoginData from '../services/login/loginDataValidation.service';
+import loginUser from '../../services/auth/loginUser.service';
+import validateLoginData from '../../services/auth/loginDataValidation.service';
 
 export interface LoginData {
   emailOrUsername: string;
@@ -20,7 +20,9 @@ export const apiLoginUser: RequestHandler = async (req, res, next) => {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 12),
     });
+
     res.json({ message: 'User successfully logged in' });
   } catch (err) {
     next(err);

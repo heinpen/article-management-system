@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
-import { findUserByEmail } from '../services/user.service';
-import { CustomError } from '../middleware/errorHandler';
+import { findUserByEmail } from '../../services/auth/user.service';
+import { CustomError } from '../../middleware/errorHandler';
 
 export const apiGetUser: RequestHandler = async (req, res, next) => {
   try {
@@ -11,9 +11,9 @@ export const apiGetUser: RequestHandler = async (req, res, next) => {
       throw new CustomError(404, 'User not found');
     }
 
-    const { username, firstName, lastName } = user;
+    const { password, ...userToSend } = user.toObject();
 
-    res.json({ username, firstName, lastName });
+    res.json({ user: userToSend });
   } catch (err) {
     next(err);
   }
