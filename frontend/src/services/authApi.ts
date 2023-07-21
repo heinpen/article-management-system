@@ -1,17 +1,30 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { DOMAIN } from '@constants';
-import { LoginData, RegistrationData } from '@types';
+import { LoginData, RegistrationData, UserData } from '@types';
 
 interface FulfilledResponse {
   message: string;
+}
+
+interface GetUserDataResponse {
+  user: UserData;
 }
 
 // Define a service using a base URL and expected endpoints
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${DOMAIN}/api/v1/` }),
+  tagTypes: ['User'],
   endpoints: (builder) => ({
+    getUserData: builder.query<GetUserDataResponse, void>({
+      query: () => ({
+        url: 'user',
+        method: 'GET',
+        credentials: 'include',
+      }),
+      providesTags: ['User'],
+    }),
     loginUser: builder.mutation<FulfilledResponse, LoginData>({
       query: (data) => ({
         url: 'login',
@@ -19,6 +32,23 @@ export const authApi = createApi({
         credentials: 'include',
         body: data,
       }),
+      invalidatesTags: ['User'],
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+          dispatch(authApi.endpoints.getUserData.initiate());
+        } catch (err) {
+          console.log(err);
+        }
+      },
+    }),
+    logoutUser: builder.mutation<FulfilledResponse, void>({
+      query: () => ({
+        url: 'logout',
+        method: 'POST',
+        credentials: 'include',
+      }),
+      invalidatesTags: ['User'],
     }),
     registerUser: builder.mutation<FulfilledResponse, RegistrationData>({
       query: (data) => ({
@@ -31,6 +61,9 @@ export const authApi = createApi({
   }),
 });
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
-export const { useLoginUserMutation, useRegisterUserMutation } = authApi;
+export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useGetUserDataQuery,
+  useLogoutUserMutation,
+} = authApi;
