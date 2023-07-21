@@ -1,6 +1,7 @@
-import { Paper, Box, Typography, Stack, Button } from '@mui/material';
+import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 import { PostData } from '@types';
 import type { FC } from 'react';
+import { shortenString } from '../../utils';
 
 interface AdminPostCardProps {
   post: PostData;
@@ -13,6 +14,8 @@ const AdminPostCard: FC<AdminPostCardProps> = ({
   handleDelete,
   handleUpdate,
 }) => {
+  const shortenedContent = shortenString(post.content, 100);
+
   return (
     <Paper
       key={post._id}
@@ -31,7 +34,7 @@ const AdminPostCard: FC<AdminPostCardProps> = ({
         <Typography variant="h6" component="div">
           {post.title}
         </Typography>
-        <Typography variant="body2">{post.content}</Typography>
+        <Typography variant="body2">{shortenedContent}</Typography>
       </Box>
       <Stack direction="row" spacing={2}>
         <Button
