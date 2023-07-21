@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from '../auth/authSlice';
-import { useDispatch } from 'react-redux';
 import { authApi } from '@services/authApi';
 import { postsApi } from '@services/postsApi';
+import { useDispatch } from 'react-redux';
+import authReducer from '../auth/authSlice';
 
 export const store = configureStore({
   reducer: {

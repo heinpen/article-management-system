@@ -1,7 +1,7 @@
+import { Grid } from '@mui/material';
+import { PostData } from '@types';
 import type { FC } from 'react';
 import PostCard from './PostCard';
-import { PostData } from '@types';
-import { Grid } from '@mui/material';
 
 interface PostListProps {
   posts: PostData[];

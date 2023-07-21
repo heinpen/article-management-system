@@ -43,8 +43,9 @@ const LoginForm: FC<LoginFormProps> = ({ handleSubmit, reset }) => {
   });
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Clear any error if a user starts typing in inputs
     formik.handleChange(e);
+
+    // Clear any error if a user starts typing in inputs
     reset();
   };
 
@@ -57,7 +58,6 @@ const LoginForm: FC<LoginFormProps> = ({ handleSubmit, reset }) => {
         id="emailOrUsername"
         label="Email Address or Username"
         autoComplete="email"
-        autoFocus
         type="text"
         name="emailOrUsername"
         onChange={handleInput}
@@ -106,7 +106,7 @@ const LoginForm: FC<LoginFormProps> = ({ handleSubmit, reset }) => {
         <Grid item>
           <Link
             component={RouterLink}
-            to="/register"
+            to="/registration"
             variant="body2"
             onClick={() => reset()}
           >

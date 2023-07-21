@@ -1,16 +1,15 @@
 import {
+  createBrowserRouter,
+  createRoutesFromElements,
   Navigate,
   Outlet,
   Route,
-  Routes,
-  createBrowserRouter,
-  createRoutesFromElements,
 } from 'react-router-dom';
 import AdminDashboard from '../pages/AdminDashboard';
-import Registration from '../pages/auth/Registration';
-import RequireAuth from './RequireAuth';
 import Login from '../pages/auth/Login';
-import Home from '../pages/Home';
+import Registration from '../pages/auth/Registration';
+import Posts from '../pages/Posts';
+import RequireAuth from './RequireAuth';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,9 +17,9 @@ export const router = createBrowserRouter(
       {/* Public routes */}
       <Route path="login" element={<Login />} />
       <Route path="registration" element={<Registration />} />
-      <Route index element={<Home />} />
+      <Route index element={<Posts />} />
       {/* Private routes */}
-      <Route element={<RequireAuth allowedRoles={['admin']} />}>
+      <Route element={<RequireAuth allowedRole={'admin'} />}>
         <Route path="admin" element={<AdminDashboard />} />
       </Route>
       {/* 404 */}

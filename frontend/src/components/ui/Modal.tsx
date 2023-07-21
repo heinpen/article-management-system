@@ -1,5 +1,5 @@
 import { Dialog } from '@mui/material';
-import { useState, useEffect, FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ModalProps {

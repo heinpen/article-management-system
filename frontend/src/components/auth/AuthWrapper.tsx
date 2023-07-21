@@ -4,7 +4,7 @@ import { FC, ReactNode } from 'react';
 import Container from '@mui/material/Container';
 
 import { CssBaseline } from '@mui/material';
-import Copyright from '../Copyright';
+import Copyright from '../Copyright/Copyright';
 
 interface AuthWrapperProps {
   children: ReactNode;

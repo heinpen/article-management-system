@@ -1,7 +1,7 @@
-import { DOMAIN } from '@constants';
-import { Link, Typography } from '@mui/material';
+import { Link, Typography, TypographyProps } from '@mui/material';
+import { FC } from 'react';
 
-export default function Copyright(props: any) {
+const Copyright: FC<TypographyProps> = (props) => {
   return (
     <Typography
       variant="body2"
@@ -11,10 +11,12 @@ export default function Copyright(props: any) {
     >
       {'Copyright © '}
       <Link color="inherit" href={`/`}>
-        Articles
+        Posts
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
-}
+};
+
+export default Copyright;

@@ -3,13 +3,14 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 import Copyright from '@components/Copyright/Copyright';
+import { FC } from 'react';
 
 interface FooterProps {
   description: string;
   title: string;
 }
 
-export default function Footer(props: FooterProps) {
+const Footer: FC<FooterProps> = (props) => {
   const { description, title } = props;
 
   return (
@@ -30,4 +31,6 @@ export default function Footer(props: FooterProps) {
       </Container>
     </Box>
   );
-}
+};
+
+export default Footer;

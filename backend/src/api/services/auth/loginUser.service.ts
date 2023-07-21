@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from '../../models/user.model';
-import { CustomError } from '../../middleware/errorHandler';
 import { LoginData } from '../../controllers/auth/login.controller';
+import { CustomError } from '../../middleware/errorHandler';
+import User from '../../models/user.model';
 
 const loginUser = async (data: LoginData) => {
   const { emailOrUsername, password, rememberMe } = data;
@@ -16,7 +16,7 @@ const loginUser = async (data: LoginData) => {
   if (!user) {
     throw new CustomError(
       404,
-      'No user found. Please verify your credentials or consider registering'
+      'No user found. Please verify your credentials or consider registering',
     );
   }
 

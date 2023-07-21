@@ -1,21 +1,16 @@
+import Modal from '@components/ui/Modal';
 import {
-  DialogTitle,
-  DialogContent,
   Box,
-  TextField,
   Button,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from '@mui/material';
-import { useEffect } from 'react';
-import type { FC } from 'react';
+import { ModalData } from '@types';
 import { useFormik } from 'formik';
+import type { FC } from 'react';
 import * as Yup from 'yup';
-import { ModalData, RequestData } from '@types';
-import {
-  useCreatePostMutation,
-  useUpdatePostMutation,
-} from '@services/postsApi';
-import Modal from '@components/ui/Modal';
 
 interface AdminModalProps {
   isOpen: boolean;
@@ -45,7 +40,12 @@ const AdminModal: FC<AdminModalProps> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      handleSubmit(values);
+      const data = {
+        title: values.title,
+        content: values.content,
+        date: new Date().toISOString(),
+      };
+      handleSubmit(data);
     },
   });
 
@@ -66,7 +66,6 @@ const AdminModal: FC<AdminModalProps> = ({
             id="title"
             label="title"
             autoComplete="title"
-            autoFocus
             type="text"
             name="title"
             onChange={handleInput}

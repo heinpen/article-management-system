@@ -1,10 +1,10 @@
 import express from 'express';
 
-import auth from './middleware/auth';
-import { apiRegisterUser } from './controllers/auth/register.controller';
-import { apiLogoutUser } from './controllers/auth/logout.controller';
-import { apiGetUser } from './controllers/auth/user.controller';
 import { apiLoginUser } from './controllers/auth/login.controller';
+import { apiLogoutUser } from './controllers/auth/logout.controller';
+import { apiRegisterUser } from './controllers/auth/register.controller';
+import { apiGetUser } from './controllers/auth/user.controller';
+import auth from './middleware/auth';
 
 import {
   apiCreatePost,

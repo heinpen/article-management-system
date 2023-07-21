@@ -13,13 +13,13 @@ interface AlertWrapperProps {
 }
 
 interface ResponseData {
-  message: string;
+  error: string;
 }
 
 const AlertWrapper: FC<AlertWrapperProps> = ({ isLoading, error, data }) => {
   const message =
     error && 'status' in error
-      ? (error.data as ResponseData).message
+      ? (error.data as ResponseData).error
       : data?.message;
 
   return (

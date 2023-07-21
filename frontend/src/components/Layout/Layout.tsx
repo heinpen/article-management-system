@@ -1,8 +1,8 @@
 import Footer from '@components/Layout/Footer';
 import Header from '@components/Layout/Header';
-import { Container, Grid } from '@mui/material';
-import { FC, ReactNode, memo } from 'react';
+import { Container } from '@mui/material';
 import PropTypes from 'prop-types';
+import { FC, memo, ReactNode } from 'react';
 interface LayoutProps {
   children: ReactNode;
 }

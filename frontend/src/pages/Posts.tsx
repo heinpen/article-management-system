@@ -65,7 +65,7 @@ const Posts: FC = () => {
           <AlertWrapper isLoading={isLoading} error={error}></AlertWrapper>
         </Stack>
         <Box sx={{ my: 2 }}>
-          <Sort handleSort={handleSort} sortingValues={data?.sortingValues} />
+          <Sort handleSort={handleSort} sortData={data?.sortData} />
         </Box>
       </Stack>
       <Box sx={{ flex: 1 }}>

@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { DOMAIN } from '@constants';
-import { PostData, RequestData } from '@types';
-import { current } from '@reduxjs/toolkit';
+import { PostData, RequestData, SortData } from '@types';
 
 interface FulfilledResponse {
   message: string;
@@ -25,10 +24,7 @@ interface GetPostsResponse {
     totalPages: number;
     totalPosts: number;
   };
-  sortingValues: {
-    label: string;
-    value: string;
-  }[];
+  sortData: SortData;
   posts: PostData[];
 }
 
@@ -70,19 +66,28 @@ export const postsApi = createApi({
         body: data,
       }),
       invalidatesTags: ['Posts'],
-      onQueryStarted({ data, requestData }, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
+      onQueryStarted: async (
+        { data, requestData },
+        { dispatch, queryFulfilled },
+      ) => {
+        const createResult = dispatch(
           postsApi.util.updateQueryData('getPosts', requestData, (draft) => {
             draft.posts.unshift({
               ...data,
               _id: String(Date.now()),
+              date: String(Date.now()),
               createdAt: String(Date.now()),
               updatedAt: String(Date.now()),
               isFake: true,
             });
           }),
         );
-        queryFulfilled.catch(patchResult.undo);
+
+        try {
+          await queryFulfilled;
+        } catch {
+          queryFulfilled.catch(createResult.undo);
+        }
       },
     }),
     updatePost: builder.mutation<FulfilledResponse, UpdatePostData>({
@@ -93,7 +98,10 @@ export const postsApi = createApi({
         body: data,
       }),
       invalidatesTags: ['Posts'],
-      onQueryStarted({ id, data, requestData }, { dispatch, queryFulfilled }) {
+      onQueryStarted: async (
+        { id, data, requestData },
+        { dispatch, queryFulfilled },
+      ) => {
         const patchResult = dispatch(
           postsApi.util.updateQueryData('getPosts', requestData, (draft) => {
             const postIndex = draft.posts.findIndex((post) => post._id === id);
@@ -101,7 +109,11 @@ export const postsApi = createApi({
             draft.posts[postIndex].content = data.content;
           }),
         );
-        queryFulfilled.catch(patchResult.undo);
+        try {
+          await queryFulfilled;
+        } catch {
+          queryFulfilled.catch(patchResult.undo);
+        }
       },
     }),
     deletePost: builder.mutation<FulfilledResponse, DeleteData>({
@@ -111,13 +123,18 @@ export const postsApi = createApi({
         credentials: 'include',
       }),
       invalidatesTags: ['Posts'],
-      onQueryStarted({ id, requestData }, { dispatch, queryFulfilled }) {
+      onQueryStarted: ({ id, requestData }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           postsApi.util.updateQueryData('getPosts', requestData, (draft) => {
             draft.posts = draft.posts.filter((post) => post._id !== id);
           }),
         );
-        queryFulfilled.catch(patchResult.undo);
+
+        try {
+          queryFulfilled;
+        } catch {
+          queryFulfilled.catch(patchResult.undo);
+        }
       },
     }),
   }),

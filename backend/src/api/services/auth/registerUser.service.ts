@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import User from '../../models/user.model';
-import { CustomError } from '../../middleware/errorHandler';
 import { RegistrationData } from '../../controllers/auth/register.controller';
+import { CustomError } from '../../middleware/errorHandler';
+import User from '../../models/user.model';
 
 const registerUser = async (data: RegistrationData) => {
   const { password, username, email } = data;

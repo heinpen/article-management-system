@@ -1,9 +1,9 @@
-import { useLoginUserMutation } from '@services/authApi';
-import type { FC } from 'react';
-import AlertWrapper from '@components/ui/AlertWrapper';
+import AuthHeader from '@components/auth/AuthHeader';
 import AuthWrapper from '@components/auth/AuthWrapper';
 import LoginForm from '@components/auth/LoginForm';
-import AuthHeader from '@components/auth/AuthHeader';
+import AlertWrapper from '@components/ui/AlertWrapper';
+import { useLoginUserMutation } from '@services/authApi';
+import { useEffect, type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login: FC = () => {
@@ -11,11 +11,13 @@ const Login: FC = () => {
 
   const [triggerLogin, response] = useLoginUserMutation();
   const { data, error, isLoading, isSuccess, reset } = response;
-  if (isSuccess) {
-    setTimeout(() => {
-      navigate('/');
-    }, 1000);
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        navigate('/admin');
+      }, 1000);
+    }
+  }, [isSuccess, navigate]);
   return (
     <AuthWrapper>
       <AuthHeader title="Login" />

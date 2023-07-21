@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
-import { findUserByEmail } from '../../services/auth/user.service';
 import { CustomError } from '../../middleware/errorHandler';
+import { findUserByEmail } from '../../services/auth/user.service';
 
 export const apiGetUser: RequestHandler = async (req, res, next) => {
   try {

@@ -1,15 +1,13 @@
-import { PostData } from '../../controllers/posts.controller';
+import { PostData } from '../../controllers/posts/posts.controller';
 import { CustomError } from '../../middleware/errorHandler';
 import Post from '../../models/post.model';
 
 // Create a new post
-export const createPost = async ({ title, content, author }: PostData) => {
+export const createPost = async ({ title, content }: PostData) => {
   const post = new Post({
     title,
     content,
-    author,
   });
-
   return post.save();
 };
 
@@ -22,11 +20,11 @@ export const getPosts = async (searchTerm?: string, sortValue?: string) => {
   }
 
   if (sortValue === 'oldest') {
-    query = query.sort({ updatedAt: 1 });
+    query = query.sort({ date: 1 });
   }
 
   if (sortValue === 'newest') {
-    query = query.sort({ updatedAt: -1 });
+    query = query.sort({ date: -1 });
   }
 
   return query.exec();
@@ -36,7 +34,7 @@ export const getPaginatedPosts = async (
   searchTerm: string | undefined,
   sortValue: string | undefined,
   page: number,
-  perPage: number
+  perPage: number,
 ) => {
   const startIndex = (page - 1) * perPage;
   const endIndex = startIndex + perPage;
@@ -67,10 +65,7 @@ export const getPostById = async (id: string) => {
 };
 
 // Update a specific post by ID
-export const updatePost = async (
-  id: string,
-  { title, content, author }: PostData
-) => {
+export const updatePost = async (id: string, { title, content }: PostData) => {
   const post = await Post.findById(id);
 
   if (!post) {
@@ -79,7 +74,6 @@ export const updatePost = async (
 
   post.title = title;
   post.content = content;
-  post.author = author;
 
   await post.save();
 

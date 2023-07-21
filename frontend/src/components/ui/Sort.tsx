@@ -1,31 +1,27 @@
 import {
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Select,
   SelectChangeEvent,
 } from '@mui/material';
-import { useState, type FC, ChangeEvent, useEffect, memo, useRef } from 'react';
+import { SortData } from '@types';
+import { useEffect, useState, type FC } from 'react';
 
 interface SortProps {
   handleSort: (value: string) => void;
-  sortingValues?: {
-    label: string;
-    value: string;
-  }[];
+  sortData?: SortData;
 }
 
-const Sort: FC<SortProps> = ({ handleSort, sortingValues }) => {
+const Sort: FC<SortProps> = ({ handleSort, sortData }) => {
   const [sortOption, setSortOption] = useState('');
 
   useEffect(() => {
     // set the default sort option
-    if (sortingValues && sortingValues.length !== 0 && sortOption === '') {
-      console.log(sortingValues);
-
-      setSortOption(sortingValues[0].value);
+    if (sortData && sortData.sortingValues.length !== 0 && sortOption === '') {
+      setSortOption(sortData.defaultValue);
     }
-  }, [sortingValues, setSortOption, sortOption]);
+  }, [sortData, setSortOption, sortOption]);
 
   const handleLocalSortChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
@@ -44,8 +40,8 @@ const Sort: FC<SortProps> = ({ handleSort, sortingValues }) => {
           value={sortOption}
           onChange={handleLocalSortChange}
         >
-          {sortingValues &&
-            sortingValues.map(({ label, value }) => (
+          {sortData &&
+            sortData.sortingValues.map(({ label, value }) => (
               <MenuItem key={value} value={value}>
                 {label}
               </MenuItem>

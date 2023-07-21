@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
-import loginUser from '../../services/auth/loginUser.service';
 import validateLoginData from '../../services/auth/loginDataValidation.service';
+import loginUser from '../../services/auth/loginUser.service';
 
 export interface LoginData {
   emailOrUsername: string;

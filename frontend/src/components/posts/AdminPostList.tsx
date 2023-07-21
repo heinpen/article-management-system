@@ -1,17 +1,8 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  Grow,
-  Paper,
-  Stack,
-  Typography,
-  Zoom,
-} from '@mui/material';
-import { PostData, RequestData } from '@types';
+import { Box } from '@mui/material';
+import { PostData } from '@types';
 import { FC } from 'react';
 import AdminPostCard from './AdminPostCard';
-import Slide from '@mui/material/Slide';
+
 interface PostListProps {
   posts: PostData[];
   handleDelete: (id: string) => void;

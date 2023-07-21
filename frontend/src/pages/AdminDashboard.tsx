@@ -68,17 +68,12 @@ const AdminDashboard: FC = () => {
   const handleCreate = () => {
     setModalData((prev) => ({ ...prev, isUpdate: false, isCreate: true }));
 
-    setTimeout(() => {
-      setModalIsOpen(true);
-    }, 100);
+    setModalIsOpen(true);
   };
 
   const handleUpdate = (post: PostData) => {
     setModalData({ post, isUpdate: true, isCreate: false });
-
-    setTimeout(() => {
-      setModalIsOpen(true);
-    }, 100);
+    setModalIsOpen(true);
   };
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +97,6 @@ const AdminDashboard: FC = () => {
       search: debouncedSearchTerm,
     }));
   }, [debouncedSearchTerm]);
-  console.log('render');
 
   return (
     <Layout>
@@ -137,7 +131,7 @@ const AdminDashboard: FC = () => {
           </Box>
 
           <Box>
-            <Sort handleSort={handleSort} sortingValues={data?.sortingValues} />
+            <Sort handleSort={handleSort} sortData={data?.sortData} />
           </Box>
         </Stack>
       </Stack>
