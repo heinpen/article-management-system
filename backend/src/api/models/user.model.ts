@@ -8,6 +8,7 @@ interface UserDocument extends Document {
   password: string;
   createdAt: Date;
   updatedAt: Date;
+  role: string;
 }
 
 const userSchema = new Schema<UserDocument>(
@@ -17,6 +18,7 @@ const userSchema = new Schema<UserDocument>(
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     password: { type: String, required: true },
+    role: { type: String, default: 'user', required: true },
   },
   {
     timestamps: true,
