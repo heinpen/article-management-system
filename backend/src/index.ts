@@ -1,12 +1,14 @@
-import express, { Express } from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import routers from './api/routes';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express, { Express } from 'express';
 import mongoose from 'mongoose';
-import yaml from 'yamljs';
+import cron from 'node-cron';
 import swaggerUI from 'swagger-ui-express';
+import yaml from 'yamljs';
 import { errorMiddleware } from './api/middleware/errorHandler';
+import routers from './api/routes';
+import { parseRSSAndSaveToDB } from './api/services/posts/rssParser';
 
 const swaggerDocument = yaml.load('openapi.yaml');
 
@@ -32,6 +34,11 @@ mongoose
   .connect(URL)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
+
+cron.schedule('0 0 * * *', () => {
+  console.log('Parsing RSS feed...');
+  parseRSSAndSaveToDB();
+});
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
