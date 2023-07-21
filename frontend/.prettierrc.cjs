@@ -10,4 +10,5 @@ module.exports = {
   bracketSpacing: true,
   arrowParens: 'always',
   jsxBracketSameLine: false,
+  plugins: ['prettier-plugin-organize-imports'],
 };
