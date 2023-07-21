@@ -12,6 +12,7 @@ export type RegistrationData = {
   email: string;
   firstName: string;
   lastName: string;
+  isAdmin: boolean;
 };
 
 export type FulfilledResponse = {
@@ -29,7 +30,31 @@ export type PostData = {
   _id: string;
   title: string;
   content: string;
-  author: string;
   createdAt: string;
   updatedAt: string;
+  isFake?: boolean;
 };
+
+export type PostDataDisplay = Pick<PostData, 'title' | 'content'>;
+
+export interface RequestData {
+  page: number;
+  search: string;
+  sort: string;
+}
+
+export interface ModalData {
+  post: PostData | null;
+  isCreate: boolean;
+  isUpdate: boolean;
+}
+
+export interface UserData {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
