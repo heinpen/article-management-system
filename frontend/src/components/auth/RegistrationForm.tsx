@@ -1,4 +1,11 @@
-import { Box, Button, Grid, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  TextField,
+} from '@mui/material';
 import Link from '@mui/material/Link';
 import { RegistrationData } from '@types';
 import { useFormik } from 'formik';
@@ -31,6 +38,7 @@ const validationSchema = Yup.object({
       'Password must be between 6 and 30 characters and contain only alphanumeric characters',
     )
     .required('Password is required'),
+  isAdmin: Yup.boolean().required(),
 });
 
 const RegistrationForm: FC<RegistrationFormProps> = ({
@@ -44,12 +52,10 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
       firstName: '',
       lastName: '',
       password: '',
+      isAdmin: false,
     },
     validationSchema,
-
     onSubmit: (values) => {
-      console.log(values);
-
       handleSubmit(values);
     },
   });
@@ -78,7 +84,6 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
           label="Email Address"
           name="email"
           autoComplete="email"
-          autoFocus
           onChange={handleInput}
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
@@ -134,13 +139,20 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
           helperText={formik.touched.password && formik.errors.password}
         />
 
+        <FormControlLabel
+          control={
+            <Checkbox {...formik.getFieldProps('isAdmin')} color="primary" />
+          }
+          label="is admin"
+        />
+
         <Button
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Registration
+          Register
         </Button>
         <Grid container>
           <Grid item>
