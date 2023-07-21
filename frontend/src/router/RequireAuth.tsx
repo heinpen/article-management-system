@@ -1,23 +1,15 @@
+import { useGetUserDataQuery } from '@services/authApi';
 import { Navigate, Outlet } from 'react-router-dom';
 
 interface RequireAuthProps {
-  allowedRoles: string[];
+  allowedRole: string;
 }
 
-interface User {
-  roles: string[];
-}
-
-const RequireAuth = ({ allowedRoles }: RequireAuthProps) => {
-  const user: User = {
-    roles: [],
-  };
-
-  return user.roles.some((role: string) => allowedRoles.includes(role)) ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/" />
-  );
+const RequireAuth = ({ allowedRole }: RequireAuthProps) => {
+  const { data, error } = useGetUserDataQuery();
+  console.log(data, 'asd');
+  const user = data?.user;
+  return user?.role === allowedRole ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default RequireAuth;
