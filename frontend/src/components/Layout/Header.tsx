@@ -1,12 +1,17 @@
-import { Stack, Typography } from '@mui/material';
+import { AppBar, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
+import { useGetUserDataQuery, useLogoutUserMutation } from '@services/authApi';
 import * as React from 'react';
 import { memo } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, Link as RouterLink } from 'react-router-dom';
 
 const Header = memo(() => {
-  console.log('render');
+  console.log('asd');
+  const { data } = useGetUserDataQuery();
+
+  const [logoutUser] = useLogoutUserMutation();
+
   return (
     <React.Fragment>
       <Toolbar
@@ -26,14 +31,40 @@ const Header = memo(() => {
         >
           Logo
         </Typography>
-        <Stack direction="row" spacing={2}>
-          <Button variant="contained" size="small">
-            Sign in
-          </Button>
-          <Button variant="outlined" size="small">
-            Sign up
-          </Button>
-        </Stack>
+
+        <nav>
+          <Link to="/" style={{ textDecoration: 'none', marginRight: '20px' }}>
+            <Button color="inherit">Posts</Button>
+          </Link>
+          <Link to="/admin" style={{ textDecoration: 'none' }}>
+            <Button color="inherit">Dashboard</Button>
+          </Link>
+        </nav>
+        {!data?.user && (
+          <Stack direction="row" spacing={2}>
+            <Link to="/login" style={{ textDecoration: 'none' }}>
+              <Button variant="contained" size="small">
+                Log in
+              </Button>
+            </Link>
+            <Link to="/registration" style={{ textDecoration: 'none' }}>
+              <Button variant="outlined" size="small">
+                Sign up
+              </Button>
+            </Link>
+          </Stack>
+        )}
+        {data?.user && (
+          <Link to="/login" style={{ textDecoration: 'none' }}>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => logoutUser()}
+            >
+              Log out
+            </Button>
+          </Link>
+        )}
       </Toolbar>
     </React.Fragment>
   );
