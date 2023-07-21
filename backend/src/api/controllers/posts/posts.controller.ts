@@ -36,15 +36,18 @@ export const apiGetPosts: RequestHandler = async (req, res, next) => {
       searchTerm,
       sortValue,
       page,
-      perPage
+      perPage,
     );
 
-    const sortingValues = [
-      { label: 'Oldest', value: 'oldest' },
-      { label: 'Newest', value: 'newest' },
-    ];
+    const sortData = {
+      sortingValues: [
+        { label: 'Oldest', value: 'oldest' },
+        { label: 'Newest', value: 'newest' },
+      ],
+      defaultValue: 'newest',
+    };
 
-    res.json({ posts, pagination, sortingValues });
+    res.json({ posts, pagination, sortData });
   } catch (error) {
     next(error);
   }
