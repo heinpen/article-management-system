@@ -1,5 +1,3 @@
-import { AuthState } from './redux/auth/authSlice';
-
 export type LoginData = {
   emailOrUsername: string;
   password: string;
@@ -30,6 +28,7 @@ export type PostData = {
   _id: string;
   title: string;
   content: string;
+  date: string;
   createdAt: string;
   updatedAt: string;
   isFake?: boolean;
@@ -57,4 +56,12 @@ export interface UserData {
   role: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface SortData {
+  sortingValues: {
+    label: string;
+    value: string;
+  }[];
+  defaultValue: string;
 }
