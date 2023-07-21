@@ -1,22 +1,25 @@
 import express from 'express';
 
 import auth from './middleware/auth';
-import { apiRegisterUser } from './controllers/register.controller';
-import { apiLoginUser } from './controllers/login.controller';
-import { apiGetUser } from './controllers/user.controller';
+import { apiRegisterUser } from './controllers/auth/register.controller';
+import { apiLogoutUser } from './controllers/auth/logout.controller';
+import { apiGetUser } from './controllers/auth/user.controller';
+import { apiLoginUser } from './controllers/auth/login.controller';
+
 import {
   apiCreatePost,
   apiDeletePost,
   apiGetPost,
   apiGetPosts,
   apiUpdatePost,
-} from './controllers/posts.controller';
+} from './controllers/posts/posts.controller';
 
 const router = express.Router();
 
 router.route('/register').post(apiRegisterUser);
 router.route('/login').post(apiLoginUser);
-router.route('/user/profile').get(auth, apiGetUser);
+router.route('/logout').post(auth, apiLogoutUser);
+router.route('/user').get(auth, apiGetUser);
 
 router.route('/posts').post(auth, apiCreatePost);
 router.route('/posts').get(apiGetPosts);
