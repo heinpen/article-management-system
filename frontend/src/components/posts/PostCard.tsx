@@ -1,38 +1,40 @@
-import * as React from 'react';
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { PostData } from '@types';
+import { FC } from 'react';
 import { shortenString } from '../../utils';
 
 interface PostCardProps {
   post: PostData;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const { title, content, author, createdAt, updatedAt } = post;
+const PostCard: FC<PostCardProps> = ({ post }) => {
+  const { title, content, date } = post;
+  const shortenedContent = shortenString(content, 100);
+  const formattedDate = new Date(date).toLocaleDateString('en-US');
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image="/static/images/cards/contemplative-reptile.jpg"
-        title="green iguana"
-      />
-      <CardContent>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <CardContent sx={{ flexGrow: 1 }}>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {shortenString(content, 60)}
+          {shortenedContent}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
-      </CardActions>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <CardActions>
+          <Button size="small">Read more</Button>
+        </CardActions>
+
+        <Typography sx={{ p: 2 }} variant="body2" color="text.secondary">
+          {formattedDate}
+        </Typography>
+      </Box>
     </Card>
   );
 };
