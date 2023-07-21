@@ -1,22 +1,15 @@
 import Layout from '@components/Layout/Layout';
 import PostList from '@components/posts/PostList';
 
+import AlertWrapper from '@components/ui/AlertWrapper';
 import Search from '@components/ui/Search';
 import Sort from '@components/ui/Sort';
-import {
-  Box,
-  CircularProgress,
-  Pagination,
-  Stack,
-  Typography,
-} from '@mui/material';
+import useDebounce from '@hooks/useDebounce';
+import { Box, Pagination, Stack, Typography } from '@mui/material';
 import { useGetPostsQuery } from '@services/postsApi';
 import { ChangeEvent, useEffect, useState, type FC } from 'react';
-import useDebounce from '@hooks/useDebounce';
-import AlertWrapper from '@components/ui/AlertWrapper';
-import { PostData } from '@types';
 
-const Home: FC = () => {
+const Posts: FC = () => {
   const [requestData, setRequestData] = useState({
     page: 1,
     search: '',
@@ -92,4 +85,4 @@ const Home: FC = () => {
     </Layout>
   );
 };
-export default Home;
+export default Posts;
