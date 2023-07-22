@@ -1,5 +1,6 @@
 import Layout from '@components/Layout/Layout';
 import PostList from '@components/posts/PostList';
+import PostModal from '@components/posts/PostModal';
 
 import AlertWrapper from '@components/ui/AlertWrapper';
 import Search from '@components/ui/Search';
@@ -7,6 +8,7 @@ import Sort from '@components/ui/Sort';
 import useDebounce from '@hooks/useDebounce';
 import { Box, Pagination, Stack, Typography } from '@mui/material';
 import { useGetPostsQuery } from '@services/postsApi';
+import { PostData } from '@types';
 import { ChangeEvent, useEffect, useState, type FC } from 'react';
 
 const Posts: FC = () => {
@@ -20,8 +22,23 @@ const Posts: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalData, setModalData] = useState({
+    title: '',
+    content: '',
+    date: '',
+  });
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleRead = (post: PostData) => {
+    setModalIsOpen(true);
+    setModalData({ title: post.title, content: post.content, date: post.date });
+  };
+
+  const handleModalClose = () => {
+    setModalIsOpen(false);
   };
 
   const handleSort = (value: string) => {
@@ -69,7 +86,14 @@ const Posts: FC = () => {
         </Box>
       </Stack>
       <Box sx={{ flex: 1 }}>
-        {data?.posts && <PostList posts={data?.posts} />}
+        {data?.posts && (
+          <PostList posts={data?.posts} handleRead={handleRead} />
+        )}
+        <PostModal
+          isOpen={modalIsOpen}
+          handleClose={handleModalClose}
+          modalData={modalData}
+        ></PostModal>
       </Box>
       <Pagination
         count={data?.pagination.totalPages}

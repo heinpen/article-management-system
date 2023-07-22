@@ -10,12 +10,14 @@ import { shortenString } from '../../utils';
 
 interface PostCardProps {
   post: PostData;
+  handleRead: (post: PostData) => void;
 }
 
-const PostCard: FC<PostCardProps> = ({ post }) => {
+const PostCard: FC<PostCardProps> = ({ post, handleRead }) => {
   const { title, content, date } = post;
   const shortenedContent = shortenString(content, 100);
   const formattedDate = new Date(date).toLocaleDateString('en-US');
+
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <CardContent sx={{ flexGrow: 1 }}>
@@ -28,7 +30,9 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
       </CardContent>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <CardActions>
-          <Button size="small">Read more</Button>
+          <Button size="small" onClick={() => handleRead(post)}>
+            Read more
+          </Button>
         </CardActions>
 
         <Typography sx={{ p: 2 }} variant="body2" color="text.secondary">
