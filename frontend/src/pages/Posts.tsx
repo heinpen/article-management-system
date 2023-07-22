@@ -5,59 +5,23 @@ import PostModal from '@components/posts/PostModal';
 import AlertWrapper from '@components/ui/AlertWrapper';
 import Search from '@components/ui/Search';
 import Sort from '@components/ui/Sort';
-import useDebounce from '@hooks/useDebounce';
+import { usePostPageLogic } from '@hooks/usePostPageLogic';
 import { Box, Pagination, Stack, Typography } from '@mui/material';
-import { useGetPostsQuery } from '@services/postsApi';
-import { PostData } from '@types';
-import { ChangeEvent, useEffect, useState, type FC } from 'react';
+import { type FC } from 'react';
 
 const Posts: FC = () => {
-  const [requestData, setRequestData] = useState({
-    page: 1,
-    search: '',
-    sort: '',
-  });
-  const { data, error, isLoading } = useGetPostsQuery(requestData);
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalData, setModalData] = useState({
-    title: '',
-    content: '',
-    date: '',
-  });
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleRead = (post: PostData) => {
-    setModalIsOpen(true);
-    setModalData({ title: post.title, content: post.content, date: post.date });
-  };
-
-  const handleModalClose = () => {
-    setModalIsOpen(false);
-  };
-
-  const handleSort = (value: string) => {
-    setRequestData({ ...requestData, sort: value });
-  };
-
-  const handlePagination = (event: ChangeEvent<unknown>, n: number) => {
-    setRequestData({ ...requestData, page: n });
-    window.scrollTo(0, 0);
-  };
-
-  // Perform the search or update based on the debounced value
-  useEffect(() => {
-    setRequestData((prev) => ({
-      ...prev,
-      page: 1,
-      search: debouncedSearchTerm,
-    }));
-  }, [debouncedSearchTerm]);
+  const {
+    data,
+    error,
+    isLoading,
+    modalIsOpen,
+    handleRead,
+    modalData,
+    handleModalClose,
+    handleSort,
+    handlePagination,
+    handleSearch,
+  } = usePostPageLogic()
 
   return (
     <Layout>

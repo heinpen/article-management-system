@@ -5,14 +5,16 @@ import { shortenString } from '../../utils';
 
 interface AdminPostCardProps {
   post: PostData;
-  handleDelete: (id: string) => void;
-  handleUpdate: (post: PostData) => void;
+  handleDelete: (id: string, e: React.MouseEvent<HTMLElement>) => void;
+  handleUpdate: (post: PostData, e: React.MouseEvent<HTMLElement>) => void;
+  handleClick: (post: PostData) => void;
 }
 
 const AdminPostCard: FC<AdminPostCardProps> = ({
   post,
   handleDelete,
   handleUpdate,
+  handleClick,
 }) => {
   const shortenedContent = shortenString(post.content, 100);
 
@@ -29,6 +31,7 @@ const AdminPostCard: FC<AdminPostCardProps> = ({
         opacity: `${post.isFake ? '.5' : '1'}`,
         backgroundColor: `${post.isFake ? '#d3e4f6' : 'inherit'}`,
       }}
+      onClick={() => handleClick(post)}
     >
       <Box>
         <Typography variant="h6" component="div">
@@ -39,7 +42,7 @@ const AdminPostCard: FC<AdminPostCardProps> = ({
       <Stack direction="row" spacing={2}>
         <Button
           size="small"
-          onClick={() => handleUpdate(post)}
+          onClick={(e) => handleUpdate(post, e)}
           variant="contained"
           color="primary"
         >
@@ -47,7 +50,7 @@ const AdminPostCard: FC<AdminPostCardProps> = ({
         </Button>
         <Button
           size="small"
-          onClick={() => handleDelete(post._id)}
+          onClick={(e) => handleDelete(post._id, e)}
           variant="contained"
           color="secondary"
         >

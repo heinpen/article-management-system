@@ -2,10 +2,12 @@ import Layout from '@components/Layout/Layout';
 import AdminModal from '@components/posts/AdminModal';
 
 import AdminPostsList from '@components/posts/AdminPostList';
+import PostModal from '@components/posts/PostModal';
 import AlertWrapper from '@components/ui/AlertWrapper';
 import Search from '@components/ui/Search';
 import Sort from '@components/ui/Sort';
 import useDebounce from '@hooks/useDebounce';
+import { usePostPageLogic } from '@hooks/usePostPageLogic';
 import { Box, Button, Pagination, Stack, Typography } from '@mui/material';
 import {
   useCreatePostMutation,
@@ -17,29 +19,34 @@ import { AdminModalData, PostData, RequestData } from '@types';
 import { ChangeEvent, useEffect, useState, type FC } from 'react';
 
 const AdminDashboard: FC = () => {
-  const [requestData, setRequestData] = useState<RequestData>({
-    page: 1,
-    search: '',
-    sort: '',
-  });
-  const { data, error, isLoading, isFetching } = useGetPostsQuery(requestData);
+  const {
+    data,
+    error,
+    isLoading,
+    modalIsOpen,
+    handleRead,
+    modalData,
+    handleModalClose,
+    handleSort,
+    handlePagination,
+    handleSearch,
+    requestData,
+    isFetching,
+  } = usePostPageLogic()
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [adminModalIsOpen, setAdminModalIsOpen] = useState(false);
 
   const [deletePost] = useDeletePostMutation();
   const [updatePost] = useUpdatePostMutation();
   const [createPost] = useCreatePostMutation();
 
-  const [modalData, setModalData] = useState<AdminModalData>({
+  const [adminModalData, setAdminModalData] = useState<AdminModalData>({
     post: null,
     isCreate: false,
     isUpdate: false,
   });
 
-  const { isCreate, isUpdate, post } = modalData;
+  const { isCreate, isUpdate, post } = adminModalData;
 
   // Handle modal
   const handleSubmit = (values: { title: string; content: string }) => {
@@ -55,49 +62,30 @@ const AdminDashboard: FC = () => {
         requestData,
       });
     }
-    setModalIsOpen(false);
+    setAdminModalIsOpen(false);
   };
 
-  const handleModalClose = () => {
-    setModalIsOpen(false);
+  const handleAdminModalClose = () => {
+    setAdminModalIsOpen(false);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: string, e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
     deletePost({ id, requestData });
   };
 
   const handleCreate = () => {
-    setModalData((prev) => ({ ...prev, isUpdate: false, isCreate: true }));
+    setAdminModalData((prev) => ({ ...prev, isUpdate: false, isCreate: true }));
 
-    setModalIsOpen(true);
+    setAdminModalIsOpen(true);
   };
 
-  const handleUpdate = (post: PostData) => {
-    setModalData({ post, isUpdate: true, isCreate: false });
-    setModalIsOpen(true);
+  const handleUpdate = (post: PostData, e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    setAdminModalData({ post, isUpdate: true, isCreate: false });
+    setAdminModalIsOpen(true);
   };
 
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleSort = (value: string) => {
-    setRequestData({ ...requestData, sort: value });
-  };
-
-  const handlePagination = (event: ChangeEvent<unknown>, n: number) => {
-    setRequestData({ ...requestData, page: n });
-    window.scrollTo(0, 0);
-  };
-
-  // Perform the search or update based on the debounced value
-  useEffect(() => {
-    setRequestData((prev) => ({
-      ...prev,
-      page: 1,
-      search: debouncedSearchTerm,
-    }));
-  }, [debouncedSearchTerm]);
 
   return (
     <Layout>
@@ -142,14 +130,20 @@ const AdminDashboard: FC = () => {
             posts={data?.posts}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
+            handleClick={handleRead}
           />
         )}
         <AdminModal
+          isOpen={adminModalIsOpen}
+          handleClose={handleAdminModalClose}
+          handleSubmit={handleSubmit}
+          modalData={adminModalData}
+        ></AdminModal>
+        <PostModal
           isOpen={modalIsOpen}
           handleClose={handleModalClose}
-          handleSubmit={handleSubmit}
           modalData={modalData}
-        ></AdminModal>
+        ></PostModal>
       </Box>
       <Pagination
         count={data?.pagination.totalPages}
