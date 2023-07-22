@@ -32,11 +32,16 @@ const AdminModal: FC<AdminModalProps> = ({
 }) => {
   const { post, isCreate } = modalData;
 
+  const formikValues = isCreate ? {
+    title: '',
+    content: '',
+  } : {
+    title: post?.title || '',
+    content: post?.content || '',
+  }
+
   const formik = useFormik({
-    initialValues: {
-      title: post?.title || '',
-      content: post?.content || '',
-    },
+    initialValues: formikValues,
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
