@@ -84,6 +84,7 @@ const AdminModal: FC<AdminModalProps> = ({
             required
             fullWidth
             multiline
+            rows={20}
             name="content"
             label="content"
             type="content"
