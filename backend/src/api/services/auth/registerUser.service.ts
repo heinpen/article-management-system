@@ -17,7 +17,7 @@ const registerUser = async (data: RegistrationData) => {
   }
 
   if (usernameExists) {
-    throw new CustomError(409, 'Username already exists');
+    throw new CustomError(409, 'Account with the same username already exists');
   }
 
   const newUser = new User({

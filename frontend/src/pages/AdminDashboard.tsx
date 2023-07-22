@@ -13,7 +13,7 @@ import {
   useGetPostsQuery,
   useUpdatePostMutation,
 } from '@services/postsApi';
-import { ModalData, PostData, RequestData } from '@types';
+import { AdminModalData, PostData, RequestData } from '@types';
 import { ChangeEvent, useEffect, useState, type FC } from 'react';
 
 const AdminDashboard: FC = () => {
@@ -33,11 +33,12 @@ const AdminDashboard: FC = () => {
   const [updatePost] = useUpdatePostMutation();
   const [createPost] = useCreatePostMutation();
 
-  const [modalData, setModalData] = useState<ModalData>({
+  const [modalData, setModalData] = useState<AdminModalData>({
     post: null,
     isCreate: false,
     isUpdate: false,
   });
+
   const { isCreate, isUpdate, post } = modalData;
 
   // Handle modal

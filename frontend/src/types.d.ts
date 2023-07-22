@@ -42,7 +42,7 @@ export interface RequestData {
   sort: string;
 }
 
-export interface ModalData {
+export interface AdminModalData {
   post: PostData | null;
   isCreate: boolean;
   isUpdate: boolean;

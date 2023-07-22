@@ -7,7 +7,7 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { ModalData } from '@types';
+import { AdminModalData } from '@types';
 import { useFormik } from 'formik';
 import type { FC } from 'react';
 import * as Yup from 'yup';
@@ -15,7 +15,7 @@ import * as Yup from 'yup';
 interface AdminModalProps {
   isOpen: boolean;
   handleClose: () => void;
-  modalData: ModalData;
+  modalData: AdminModalData;
   handleSubmit: (values: { title: string; content: string }) => void;
 }
 
