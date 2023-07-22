@@ -34,6 +34,10 @@ paths:
                 lastName:
                   type: string
                   example: Doe
+                isAdmin:
+                  type: boolean
+                  example: true  
+                
       responses:
         '200':
           description: User created successfully
@@ -45,7 +49,7 @@ paths:
                   done:
                     type: boolean
                     example: true
-        '400':
+        '409':
           description: Bad request
           content:
             application/json:
@@ -57,7 +61,7 @@ paths:
                     properties:
                       message:
                         type: string
-                        example: Account with the same email already exists
+                        example: Account with the same email already exists or Account with the same username already exists
   /login:
     post:
       tags:
@@ -103,21 +107,22 @@ paths:
                       message:
                         type: string
                         example: Wrong password
-  /user/profile:
+  /user:
     get:
       tags:
-        - Users
-      summary: Get user profile
-      security:
-        - BearerAuth: []
+        - User
+      summary: Get user data
       responses:
         '200':
-          description: User profile retrieved successfully
+          description: User data retrieved successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  _id:
+                    type: string
+                    example: 5f9b2b3b4b9f9c2b7c9b4b9f
                   username:
                     type: string
                     example: john_doe
@@ -127,6 +132,10 @@ paths:
                   lastName:
                     type: string
                     example: Doe
+                  email:
+                    type: string
+                    format: email
+                    example: jondoe@gmail.com
         '400':
           description: Bad request
           content:
@@ -140,10 +149,148 @@ paths:
                       message:
                         type: string
                         example: No user found. Please verify your credentials or consider registering
-security:
-  - BearerAuth: []
+  /posts:
+    post:
+      summary: Create a new post
+      tags:
+        - Posts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+    get:
+      summary: Get posts
+      tags:
+        - Posts
+      parameters:
+        - name: search
+          in: query
+          description: Search term to filter posts by title
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Sort value for sorting posts
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+  /posts/{id}:
+    get:
+      summary: Get a post by ID
+      tags:
+        - Posts
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Post not found
+    put:
+      summary: Update a post by ID
+      tags:
+        - Posts
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Post not found
+    delete:
+      summary: Delete a post by ID
+      tags:
+        - Posts
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the post
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Post not found
 components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
+  schemas:
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: abcd1234
+        title:
+          type: string
+          example: My Post
+        content:
+          type: string
+          example: Lorem ipsum dolor sit amet.
+        data:
+          type: string
+          example: 2020-10-30T00:00:00.000Z
+          
+
+    PostInput:
+      type: object
+      properties:
+        title:
+          type: string
+          example: My Post
+        content:
+          type: string
+          example: Lorem ipsum dolor sit amet.
+        data:
+          type: string
+          example: 2020-10-30T00:00:00.000Z
