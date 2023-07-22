@@ -28,8 +28,10 @@ const loginUser = async (data: LoginData) => {
   }
 
   const token = rememberMe
-    ? jwt.sign({ email }, SECRET_KEY)
-    : jwt.sign({ email }, SECRET_KEY, { expiresIn: 60 * 60 * 12 });
+    ? jwt.sign({ email }, SECRET_KEY, {
+        expiresIn: 1000 * 60 * 60 * 24 * 7,
+      })
+    : jwt.sign({ email }, SECRET_KEY, { expiresIn: 1000 * 60 * 60 * 12 });
 
   return token;
 };
