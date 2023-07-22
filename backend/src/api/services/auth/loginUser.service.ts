@@ -29,9 +29,9 @@ const loginUser = async (data: LoginData) => {
 
   const token = rememberMe
     ? jwt.sign({ email }, SECRET_KEY, {
-        expiresIn: 1000 * 60 * 60 * 24 * 7,
+        expiresIn: '7d',
       })
-    : jwt.sign({ email }, SECRET_KEY, { expiresIn: 1000 * 60 * 60 * 12 });
+    : jwt.sign({ email }, SECRET_KEY, { expiresIn: '1d' });
 
   return token;
 };
