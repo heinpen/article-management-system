@@ -1,5 +1,3 @@
-Article Management System
-
 # Article Management System
 
 This is a web application for managing articles. It allows administrators to create, update, and delete articles, while regular users for now can only read articles.
@@ -73,12 +71,41 @@ Replace `your-mongodb-connection-string` with your MongoDB connection string, an
 ⚠️ **IMPORTANT: Before running the application, ensure you add your IP to your MongoDB cluster whitelist to allow access.**
 
 5. Start the development server:
+6. ## Installation and Setup
+
+7. Clone the repository to your local machine:
+
+```bash
+ git clone https://github.com/your-username/article-management-system.git`
+```
+
+2.  Navigate to the backend directory and install dependencies:
+
+```bash
+cd backend
+npm install`
+```
+
+3.  Start the backend server:
 
 ```bash
 npm run start:dev
 ```
 
-6. Access the application at `http://localhost:PORT` (with the PORT number you put in `.env` file) in your web browser.
+4.  Navigate to the frontend directory and install dependencies:
+
+bashCopy code
+
+```bash
+cd ../frontend
+npm install`
+```
+
+5.  Start the frontend application:
+
+```bash
+npm run dev
+```
 
 ## How to Use
 
@@ -96,6 +123,9 @@ The Article Management System uses a RESTful API to interact with the backend. F
 
 The application uses MongoDB as the database to store articles, user information, and other data. The MongoDB connection URI is specified in the `.env` file.
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://chat.openai.com/c/LICENSE) file for details.
 
 ## Contributors
 
