@@ -6,17 +6,15 @@ import PostModal from '@components/posts/PostModal';
 import AlertWrapper from '@components/ui/AlertWrapper';
 import Search from '@components/ui/Search';
 import Sort from '@components/ui/Sort';
-import useDebounce from '@hooks/useDebounce';
 import { usePostPageLogic } from '@hooks/usePostPageLogic';
 import { Box, Button, Pagination, Stack, Typography } from '@mui/material';
 import {
   useCreatePostMutation,
   useDeletePostMutation,
-  useGetPostsQuery,
   useUpdatePostMutation,
 } from '@services/postsApi';
-import { AdminModalData, PostData, RequestData } from '@types';
-import { ChangeEvent, useEffect, useState, type FC } from 'react';
+import { AdminModalData, PostData } from '@types';
+import { useState, type FC } from 'react';
 
 const AdminDashboard: FC = () => {
   const {
@@ -32,7 +30,7 @@ const AdminDashboard: FC = () => {
     handleSearch,
     requestData,
     isFetching,
-  } = usePostPageLogic()
+  } = usePostPageLogic();
 
   const [adminModalIsOpen, setAdminModalIsOpen] = useState(false);
 
@@ -85,7 +83,6 @@ const AdminDashboard: FC = () => {
     setAdminModalData({ post, isUpdate: true, isCreate: false });
     setAdminModalIsOpen(true);
   };
-
 
   return (
     <Layout>
@@ -148,6 +145,7 @@ const AdminDashboard: FC = () => {
       <Pagination
         count={data?.pagination.totalPages}
         variant="outlined"
+        page={requestData.page}
         shape="rounded"
         onChange={handlePagination}
         sx={{
