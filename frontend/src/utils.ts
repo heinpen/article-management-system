@@ -8,6 +8,6 @@ export const shortenString = (str: string, n: number) => {
 
 export const getBasePath = (path: string) => {
   const pathParts = path.split('/');
-  console.log(`/${pathParts.slice(1, 3).join('/')}`);
-  return `/${pathParts.slice(1, 3).join('/')}`;
+  const basePath = `/${pathParts[1]}`;
+  return basePath;
 };
