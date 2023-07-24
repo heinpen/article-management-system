@@ -21,7 +21,7 @@ const URL = process.env.URL;
 if (!URL) throw new Error('MongoDB connection URL is missing');
 
 // Middleware
-app.use(cors({ credentials: true, origin: true }));
+app.use(cors({ credentials: true, origin: 'https://article-management-system-blbk.vercel.app' }));
 app.use(express.json());
 app.use(cookieParser());
 

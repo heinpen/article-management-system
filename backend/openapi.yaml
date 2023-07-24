@@ -3,7 +3,7 @@ info:
   title: API
   version: 1.0.0
 servers:
-  - url: http://localhost:3001/api/v1
+  - url: https://article-management-system-backend.onrender.com/api/v1
     description: Dev server
 paths:
   /register:
@@ -36,8 +36,8 @@ paths:
                   example: Doe
                 isAdmin:
                   type: boolean
-                  example: true  
-                
+                  example: true
+
       responses:
         '200':
           description: User created successfully
@@ -280,7 +280,6 @@ components:
         data:
           type: string
           example: 2020-10-30T00:00:00.000Z
-          
 
     PostInput:
       type: object

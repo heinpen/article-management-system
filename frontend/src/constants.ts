@@ -1,1 +1,1 @@
-export const DOMAIN = 'http://localhost:3001';
+export const DOMAIN = 'https://article-management-system-backend.onrender.com';
