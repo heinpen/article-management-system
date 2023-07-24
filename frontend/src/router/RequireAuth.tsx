@@ -7,7 +7,6 @@ interface RequireAuthProps {
 
 const RequireAuth = ({ allowedRole }: RequireAuthProps) => {
   const { data } = useGetUserDataQuery();
-  console.log(data)
   const user = data?.user;
   return user?.role === allowedRole ? <Outlet /> : <Navigate to="/" />;
 };
