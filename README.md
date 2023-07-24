@@ -14,6 +14,26 @@ The main features of the Article Management System include:
 - Create, Update, Delete: Administrators can create new articles, update existing articles, and delete articles as needed.
 - Read-only for Users: Regular users can access and read articles but do not have permission to perform any modifications.
 
+## Screenshots
+
+### User Posts
+
+![User Posts](./demo-images/user_posts.png)
+
+This is how user posts are displayed on the website. Users can view and read articles created by other users.
+
+### Unregistered User Posts
+
+![Unregistered User Posts](./demo-images/unregistered_user_posts.png)
+
+Even unregistered users can access and read articles on the website.
+
+### Admin Posts
+
+![Admin Posts](./demo-images/admin_posts.png)
+
+Admin users have additional privileges and can manage articles and users from the admin dashboard.
+
 ## How to Register as an Admin
 
 During the registration process, an additional "Is Admin" checkbox is provided. To become an administrator, check this box during registration. Only users with the "Is Admin" checkbox checked will have access to the admin dashboard and the ability to perform CRUD operations on articles.
