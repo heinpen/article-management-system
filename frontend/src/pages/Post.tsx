@@ -1,4 +1,5 @@
 import Layout from '@components/Layout/Layout';
+import AlertWrapper from '@components/ui/AlertWrapper';
 
 import { Typography } from '@mui/material';
 import { useGetPostQuery } from '@services/postsApi';
@@ -12,10 +13,11 @@ const Post: FC = () => {
     navigate('404');
     return null;
   }
-  const { data } = useGetPostQuery(postId);
+  const { data, isLoading, error } = useGetPostQuery(postId);
 
   return (
     <Layout>
+      <AlertWrapper isLoading={isLoading} error={error} />
       <Typography
         component="h2"
         variant="h5"
