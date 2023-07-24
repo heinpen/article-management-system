@@ -1,6 +1,5 @@
 import Layout from '@components/Layout/Layout';
 import PostList from '@components/posts/PostList';
-import PostModal from '@components/posts/PostModal';
 
 import AlertWrapper from '@components/ui/AlertWrapper';
 import Search from '@components/ui/Search';
@@ -14,14 +13,11 @@ const Posts: FC = () => {
     data,
     error,
     isLoading,
-    modalIsOpen,
     handleRead,
-    modalData,
-    handleModalClose,
     handleSort,
     handlePagination,
     handleSearch,
-    requestData
+    requestData,
   } = usePostPageLogic();
 
   return (
@@ -54,11 +50,6 @@ const Posts: FC = () => {
         {data?.posts && (
           <PostList posts={data?.posts} handleRead={handleRead} />
         )}
-        <PostModal
-          isOpen={modalIsOpen}
-          handleClose={handleModalClose}
-          modalData={modalData}
-        ></PostModal>
       </Box>
       <Pagination
         count={data?.pagination.totalPages}

@@ -8,17 +8,11 @@ import useDebounce from './useDebounce';
 export const usePostPageLogic = () => {
   let { page } = useParams();
   const location = useLocation();
-  console.log(location);
+
   const [requestData, setRequestData] = useState({
     page: page ? parseInt(page) : 1,
     search: '',
     sort: '',
-  });
-
-  const [modalData, setModalData] = useState({
-    title: '',
-    content: '',
-    date: '',
   });
 
   const { data, error, isLoading, isFetching } = useGetPostsQuery(requestData);
@@ -26,11 +20,7 @@ export const usePostPageLogic = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
-  const handleModalClose = () => {
-    setModalIsOpen(false);
-  };
 
   const handleSort = (value: string) => {
     setRequestData({ ...requestData, sort: value });
@@ -38,7 +28,7 @@ export const usePostPageLogic = () => {
 
   const handlePagination = (event: ChangeEvent<unknown>, n: number) => {
     setRequestData({ ...requestData, page: n });
-    navigate(`${getBasePath(location.pathname)}/${n}`);
+    navigate(`${getBasePath(location.pathname)}/page/${n}`);
     window.scrollTo(0, 0);
   };
 
@@ -47,8 +37,7 @@ export const usePostPageLogic = () => {
   };
 
   const handleRead = (post: PostData) => {
-    setModalIsOpen(true);
-    setModalData({ title: post.title, content: post.content, date: post.date });
+    navigate(`/posts/${post._id}`);
   };
 
   // Perform the search or update based on the debounced value
@@ -66,10 +55,7 @@ export const usePostPageLogic = () => {
     isLoading,
     searchTerm,
     debouncedSearchTerm,
-    modalIsOpen,
-    modalData,
     handleRead,
-    handleModalClose,
     handleSort,
     handlePagination,
     handleSearch,

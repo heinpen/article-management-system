@@ -23,7 +23,7 @@ router.route('/user').get(auth, apiGetUser);
 
 router.route('/posts').post(auth, apiCreatePost);
 router.route('/posts').get(apiGetPosts);
-router.route('/posts/:id').get(auth, apiGetPost);
+router.route('/posts/:id').get(apiGetPost);
 router.route('/posts/:id').put(auth, apiUpdatePost);
 router.route('/posts/:id').delete(auth, apiDeletePost);
 
