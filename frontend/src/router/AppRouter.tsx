@@ -19,7 +19,7 @@ export const router = createBrowserRouter(
       {/* Public routes */}
       <Route index element={<Navigate to="posts" />} />
       <Route path="posts" element={<LazyPosts />} />
-
+      <Route path="posts/:page" element={<LazyPosts />} />
       <Route path="login" element={<LazyLogin />} />
       <Route path="registration" element={<LazyRegistration />} />
       {/* Private routes */}

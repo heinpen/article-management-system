@@ -1,14 +1,20 @@
 import { useGetPostsQuery } from '@services/postsApi';
 import { PostData } from '@types';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { getBasePath } from '../utils';
 import useDebounce from './useDebounce';
 
 export const usePostPageLogic = () => {
+  let { page } = useParams();
+  const location = useLocation();
+  console.log(location);
   const [requestData, setRequestData] = useState({
-    page: 1,
+    page: page ? parseInt(page) : 1,
     search: '',
     sort: '',
   });
+
   const [modalData, setModalData] = useState({
     title: '',
     content: '',
@@ -21,7 +27,7 @@ export const usePostPageLogic = () => {
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
+  const navigate = useNavigate();
   const handleModalClose = () => {
     setModalIsOpen(false);
   };
@@ -32,6 +38,7 @@ export const usePostPageLogic = () => {
 
   const handlePagination = (event: ChangeEvent<unknown>, n: number) => {
     setRequestData({ ...requestData, page: n });
+    navigate(`${getBasePath(location.pathname)}/${n}`);
     window.scrollTo(0, 0);
   };
 
@@ -48,7 +55,6 @@ export const usePostPageLogic = () => {
   useEffect(() => {
     setRequestData((prev) => ({
       ...prev,
-      page: 1,
       search: debouncedSearchTerm,
     }));
   }, [debouncedSearchTerm]);
