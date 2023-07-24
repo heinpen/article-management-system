@@ -14,7 +14,7 @@ const Login: FC = () => {
   useEffect(() => {
     if (isSuccess) {
       setTimeout(() => {
-        navigate('/admin');
+        navigate('/admin-posts');
       }, 1000);
     }
   }, [isSuccess, navigate]);

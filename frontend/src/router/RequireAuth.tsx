@@ -6,7 +6,12 @@ interface RequireAuthProps {
 }
 
 const RequireAuth = ({ allowedRole }: RequireAuthProps) => {
-  const { data } = useGetUserDataQuery();
+  const { data, isLoading } = useGetUserDataQuery();
+  if (isLoading) {
+    // If data is loading, you can return a loading indicator or null
+    return null;
+  }
+
   const user = data?.user;
   return user?.role === allowedRole ? <Outlet /> : <Navigate to="/" />;
 };

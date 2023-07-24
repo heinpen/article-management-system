@@ -24,7 +24,9 @@ export const router = createBrowserRouter(
       <Route path="registration" element={<LazyRegistration />} />
       {/* Private routes */}
       <Route element={<RequireAuth allowedRole={'admin'} />}>
-        <Route path="admin" element={<LazyAdminDashboard />} />
+        <Route path="admin-posts" element={<LazyAdminDashboard />} />
+
+        <Route path="admin-posts/:page" element={<LazyAdminDashboard />} />
       </Route>
       {/* 404 */}
       <Route path="*" element={<Navigate to="posts" />} />

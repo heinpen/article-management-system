@@ -41,7 +41,7 @@ const Header = memo(() => {
           <Link to="/" style={{ textDecoration: 'none', marginRight: '20px' }}>
             <Button color="inherit">Posts</Button>
           </Link>
-          <Link to="/admin" style={{ textDecoration: 'none' }}>
+          <Link to="/admin-posts" style={{ textDecoration: 'none' }}>
             <Button color="inherit">Dashboard</Button>
           </Link>
         </nav>

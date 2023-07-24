@@ -21,7 +21,8 @@ const Posts: FC = () => {
     handleSort,
     handlePagination,
     handleSearch,
-  } = usePostPageLogic()
+    requestData
+  } = usePostPageLogic();
 
   return (
     <Layout>
@@ -62,6 +63,7 @@ const Posts: FC = () => {
       <Pagination
         count={data?.pagination.totalPages}
         variant="outlined"
+        page={requestData.page}
         shape="rounded"
         onChange={handlePagination}
         sx={{
