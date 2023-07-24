@@ -18,6 +18,7 @@ const Posts: FC = () => {
     handlePagination,
     handleSearch,
     requestData,
+    isFetching,
   } = usePostPageLogic();
 
   return (
@@ -40,13 +41,13 @@ const Posts: FC = () => {
       >
         <Stack direction="row" spacing={2} sx={{ my: 2 }}>
           <Search handleSearch={handleSearch} />
-          <AlertWrapper isLoading={isLoading} error={error}></AlertWrapper>
+          <AlertWrapper isLoading={isLoading || isFetching} error={error}></AlertWrapper>
         </Stack>
         <Box sx={{ my: 2 }}>
           <Sort handleSort={handleSort} sortData={data?.sortData} />
         </Box>
       </Stack>
-      <Box sx={{ flex: 1 }}>
+      <Box sx={{ flex: 1, opacity: isFetching ? 0.5 : 1  }}>
         {data?.posts && (
           <PostList posts={data?.posts} handleRead={handleRead} />
         )}

@@ -117,7 +117,7 @@ const AdminDashboard: FC = () => {
           </Box>
         </Stack>
       </Stack>
-      <Box sx={{ flex: 1 }}>
+      <Box sx={{ flex: 1, opacity: isFetching ? 0.5 : 1  }} >
         {data?.posts && (
           <AdminPostsList
             posts={data?.posts}
@@ -126,13 +126,13 @@ const AdminDashboard: FC = () => {
             handleClick={handleRead}
           />
         )}
+      </Box>
         <AdminModal
           isOpen={adminModalIsOpen}
           handleClose={handleAdminModalClose}
           handleSubmit={handleSubmit}
           modalData={adminModalData}
         ></AdminModal>
-      </Box>
       <Pagination
         count={data?.pagination.totalPages}
         variant="outlined"
