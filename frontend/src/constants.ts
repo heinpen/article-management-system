@@ -1,1 +1,1 @@
-export const DOMAIN = 'https://article-management-system-backend.onrender.com';
+export const DOMAIN = 'https://article-management-system-server.vercel.app';
