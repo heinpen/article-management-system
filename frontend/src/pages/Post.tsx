@@ -10,7 +10,7 @@ const Post: FC = () => {
   let { postId } = useParams();
   const navigate = useNavigate();
   if (!postId) {
-    navigate('404');
+    navigate('posts');
     return null;
   }
   const { data, isLoading, error } = useGetPostQuery(postId);

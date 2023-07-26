@@ -1,3 +1,4 @@
+import { isValidObjectId } from 'mongoose';
 import { PostData } from '../../controllers/posts/posts.controller';
 import { CustomError } from '../../middleware/errorHandler';
 import Post from '../../models/post.model';
@@ -56,7 +57,11 @@ export const getPaginatedPosts = async (
 
 // Get a specific post by ID
 export const getPostById = async (id: string) => {
-  const post = Post.findById(id);
+  if (!isValidObjectId(id)) {
+    throw new CustomError(404, 'Invalid post ID');
+  }
+  const post = await Post.findById(id);
+
   if (!post) {
     throw new CustomError(404, 'Post not found');
   }
