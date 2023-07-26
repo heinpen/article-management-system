@@ -14,6 +14,14 @@ The main features of the Article Management System include:
 - Create, Update, Delete: Administrators can create new articles, update existing articles, and delete articles as needed.
 - Read-only for Users: Regular users can access and read articles but do not have permission to perform any modifications.
 
+## Live demo
+
+The server of this website is hosted on a serverless function, 
+which may result in longer loading times at the beginning. 
+So just wait a few seconds for the server to start and if you don't get any posts just press F5 
+
+[Click here for the Live Demo](https://article-management-system-blbk.vercel.app)
+
 ## Screenshots
 
 ### User Posts
