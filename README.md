@@ -20,7 +20,7 @@ The server of this website is hosted on a serverless function,
 which may result in longer loading times at the beginning. 
 So just wait a few seconds for the server to start and if you don't get any posts just press F5 
 
-[Click here for the Live Demo](https://article-management-system-server.vercel.app/)
+[Click here for the Live Demo](https://article-management-system-blbk.vercel.app)
 
 ## Screenshots
 
