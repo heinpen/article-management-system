@@ -17,11 +17,13 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 3001;
 const URL = process.env.URL;
+const CORS_ORIGIN = process.env.CORS_ORIGIN;
 
 if (!URL) throw new Error('MongoDB connection URL is missing');
+if (!process.env.TOKEN_KEY) throw new Error('Token secret is missing');
 
 // Middleware
-app.use(cors({ credentials: true, origin: 'https://article-management-system-blbk.vercel.app' }));
+app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
 app.use(express.json());
 app.use(cookieParser());
 

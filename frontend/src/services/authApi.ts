@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { DOMAIN } from '@constants';
 import { LoginData, RegistrationData, UserData } from '@types';
 
 interface FulfilledResponse {
@@ -11,10 +10,12 @@ interface GetUserDataResponse {
   user: UserData | undefined;
 }
 
+const SERVER_DOMAIN = import.meta.env.VITE_SERVER_DOMAIN;
+console.log(SERVER_DOMAIN);
 // Define a service using a base URL and expected endpoints
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${DOMAIN}/api/v1/` }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${SERVER_DOMAIN}/api/v1/` }),
   tagTypes: ['User'],
   endpoints: (builder) => ({
     getUserData: builder.query<GetUserDataResponse, void>({

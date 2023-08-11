@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { DOMAIN } from '@constants';
 import { PostData, RequestData, SortData } from '@types';
 
 interface FulfilledResponse {
@@ -43,10 +42,12 @@ interface DeleteData {
   requestData: RequestData;
 }
 
+const SERVER_DOMAIN = import.meta.env.VITE_SERVER_DOMAIN;
+
 // Define a service using a base URL and expected endpoints
 export const postsApi = createApi({
   reducerPath: 'postsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${DOMAIN}/api/v1/` }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${SERVER_DOMAIN}/api/v1/` }),
   tagTypes: ['Posts'],
   endpoints: (builder) => ({
     getPosts: builder.query<GetPostsResponse, GetPostsRequest>({
@@ -58,6 +59,7 @@ export const postsApi = createApi({
     getPost: builder.query<PostData, string>({
       query: (id) => `posts/${id}`,
     }),
+
     createPost: builder.mutation<FulfilledResponse, RequestPostData>({
       query: ({ data }) => ({
         url: 'posts',

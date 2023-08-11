@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 const apiAuthUser: RequestHandler = async (req, res, next) => {
   try {
     const SECRET_KEY =
-      process.env.TOKEN_KEY || 'jllgshllWEUJHGHYJkjsfjds90JKLHKJDFH2L341234';
+      process.env.TOKEN_KEY || '';
 
     const { JWT_TOKEN } = req.cookies;
 

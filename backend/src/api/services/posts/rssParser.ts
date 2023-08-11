@@ -3,9 +3,10 @@ import Post from '../../models/post.model';
 
 export const parseRSSAndSaveToDB = async () => {
   const parser = new rssParser();
-  const feedUrl = 'https://feeds.simplecast.com/xWZglpA_'; // Replace with your RSS feed URL
+  const feedUrl = process.env.FEED_URL || '';
 
   try {
+    if (!feedUrl) throw new Error('RSS feed URL is missing');
     const feed = await parser.parseURL(feedUrl);
 
     feed.items.forEach(async (item) => {

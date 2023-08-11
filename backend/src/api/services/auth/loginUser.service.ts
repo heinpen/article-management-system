@@ -8,7 +8,7 @@ const loginUser = async (data: LoginData) => {
   const { emailOrUsername, password, rememberMe } = data;
 
   const SECRET_KEY =
-    process.env.TOKEN_KEY || 'jllgshllWEUJHGHYJkjsfjds90JKLHKJDFH2L341234';
+    process.env.TOKEN_KEY || '';
 
   const user = await User.findOne({
     $or: [{ username: emailOrUsername }, { email: emailOrUsername }],
