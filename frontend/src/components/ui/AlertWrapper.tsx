@@ -1,4 +1,6 @@
 import { Alert, CircularProgress } from '@mui/material';
+import { SerializedError } from '@reduxjs/toolkit';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 
 import { FulfilledResponse } from '@types';
 import type { FC } from 'react';
@@ -6,22 +8,24 @@ import type { FC } from 'react';
 interface AlertWrapperProps {
   isLoading: boolean;
   data?: FulfilledResponse | undefined;
-  error: ResponseData;
+  error: FetchBaseQueryError | SerializedError | undefined;
 }
 
 interface ResponseData {
-  error?: string;
-  status?: string;
-  message?: string;
+  message: string;
 }
 
 const AlertWrapper: FC<AlertWrapperProps> = ({ isLoading, error, data }) => {
-  const errorMessage =
-    error && error.status
-      ? error.status === 'FETCH_ERROR'
-        ? 'Network Error'
-        : error.error
-      : error?.message;
+
+  let errorMessage = 'Something went wrong';
+
+  if(error) {
+    if ('status' in error && 'error' in error) {
+      errorMessage = error.status === 'FETCH_ERROR' ? 'Network error' : error.error;
+    } else {
+      errorMessage = (error as ResponseData).message;
+    }
+  }
 
   return (
     <>
